@@ -2,7 +2,6 @@ const request = require('supertest');
 const _ = require('lodash');
 const app = require('../app');
 const data = {
-    user_id: "1",
     title: "hello",
     content: "world"
 }
@@ -38,9 +37,9 @@ describe("GET /todo", () => {
     });
 });
 
-describe("GET /todo/:createdAt?user_id=", () => {
+describe("GET /todo/:createdAt", () => {
     it('Should return 200 status code', (done) => {
-        request(app).get(`/todo/${createdData.createdAt}?user_id=${createdData.user_id}`).expect(200).end((err, res) => {
+        request(app).get(`/todo/${createdData.createdAt}`).expect(200).end((err, res) => {
             if(err) return done(err);
             
             console.log(res.body);
