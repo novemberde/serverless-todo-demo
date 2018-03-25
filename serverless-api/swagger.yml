@@ -1,0 +1,118 @@
+swagger: "2.0"
+info:
+  title: AWSKRUG Serverless Group Hands-on!
+  version: v1
+paths:
+  /:
+    get:
+      operationId: listTodos
+      summary: List Todo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: |-
+            200 response
+          examples:
+            application/json: |-
+              [
+                {
+                  "user_id": "1",
+                  "createdAt": "2018-03-24T16:00:51.278Z",
+                  "title": "hello"
+                  "content": "world. Successfully modified!",
+                  "updatedAt": "2018-03-24T16:00:52.135Z"
+                }
+              ]
+    post:
+      operationId: createTodo
+      summary: Create Todo
+      produces:
+        - application/json
+      parameters: 
+        - 
+          name: "Todo"
+          in: "body"
+          description: "Todo to add"
+          required: true
+          schema: 
+            $ref: "#/definitions/NewTodo"
+      responses:
+        "201":
+          description: |-
+            201 response
+          examples:
+            application/json: |-
+              {
+                "user_id": "1",
+                "createdAt": "2018-03-24T16:00:51.278Z",
+                "title": "hello"
+                "content": "world. Successfully modified!",
+                "updatedAt": "2018-03-24T16:00:52.135Z"
+              }
+  /:createdAt:
+    get:
+      operationId: getTodo
+      summary: Get Todo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: |-
+            200 response
+          examples:
+            application/json: |-
+              {
+                "user_id": "1",
+                "createdAt": "2018-03-24T16:00:51.278Z",
+                "title": "hello"
+                "content": "world. Successfully modified!",
+                "updatedAt": "2018-03-24T16:00:51.278Z"
+              }
+    put:
+      operationId: updateTodo
+      summary: Update Todo
+      produces:
+        - application/json
+      parameters: 
+        - 
+          name: "Todo"
+          in: "body"
+          description: "Todo to update"
+          required: true
+          schema: 
+            $ref: "#/definitions/NewTodo"
+      responses:
+        "200":
+          description: |-
+            200 response
+          examples:
+            application/json: |-
+              {
+                "user_id": "1",
+                "createdAt": "2018-03-24T16:00:51.278Z",
+                "title": "hello"
+                "content": "world. Successfully modified!",
+                "updatedAt": "2018-03-24T16:00:51.278Z"
+              }
+    delete:
+      operatioinId: deleteTodo
+      summary: Delete Todo
+      produces:
+        - application/json
+      responses:
+        "204":
+          description: |-
+            204 response
+consumes:
+  - application/json
+definitions:
+  NewTodo: 
+      type: "object"
+      required: 
+        - "name"
+      properties: 
+        title: 
+          type: "string"
+        content: 
+          type: "string"
