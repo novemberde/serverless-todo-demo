@@ -385,7 +385,141 @@ Resources:
         'Fn::Sub': 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/*/*/*'
 ```
 
+---
+
+모든 파일을 편집하였다면 서버를 가동해봅니다.
+
+```sh
+ec2-user:~/environment/serverless-api $ npm start
+> serverless-api@1.0.0 start /home/ec2-user/environment/serverless-api
+> node bin/www
+
+ap-northeast-2
+Server is running on 8080
+```
+
+서버가 제대로 응답하는지 확인하기 위해 새로운 터미널을 열어 get 요청을 해봅니다.
+
+```sh
+ec2-user:~/environment/serverless-api $ curl localhost:8080
+hello world!
+ec2-user:~/environment/serverless-api $ curl localhost:8080/todo
+응답없음
+```
+
+서버를 가동하였지만 API가 사용가능한 상태는 아닙니다.
+DynamoDB의 테이블을 생성하지 않았기 때문입니다.
+
+## DynamoDB 테이블 생성하기
+
+DynamoDB를 설계할 시 주의해야할 점은 [FAQ](https://aws.amazon.com/ko/dynamodb/faqs/)를 참고하시길 바랍니다.
+
+이제 DynamoDB에 Todo table을 생성할 것입니다. 파티션 키와 정렬 키는 다음과 같이 설정합니다.
+
+- 파티션키(Partition Key): user_id
+- 정렬키(Sort Key): createdAt
+
+소스코드 상에서는 user_id를 "1"로 고정시켜두었습니다. 일반적으로 유저의 키값을 partition key로 사용하기 때문입니다.
+또한 레코드의 생성 시간을 정렬키로 사용합니다.
+
+그럼 [DynamoDB Console](https://ap-northeast-2.console.aws.amazon.com/dynamodb/home?region=ap-northeast-2#)로 이동합니다.
+테이블 만들기를 클릭하여 아래와 같이 테이블을 생성합니다.
+
+![dynamodb-create](/images/dynamodb-create.png)
+
+그런 다음에 다시 Cloud9으로 돌아가서 테스트 코드를 돌려봅니다.
+
+```sh
+ec2-user:~/environment/serverless-api $ npm test
+
+> serverless-api@1.0.0 test /home/ec2-user/environment/serverless-api
+> mocha spec/*.spec.js --timeout 10000
+
+ap-northeast-2
+
+
+  POST /todo
+    ✓ Should return 201 status code (912ms)
+
+  PUT /todo/:id
+    ✓ Should return 200 status code (225ms)
+
+  GET /todo
+[ { content: 'world. Successfully modified!',
+    createdAt: '2018-04-01T13:56:34.808Z',
+    user_id: '1',
+    updatedAt: '2018-04-01T13:56:35.687Z',
+    title: 'hello' } ]
+    ✓ Should return 200 status code (224ms)
+
+  GET /todo/:createdAt?user_id=
+2018-04-01T13:56:34.808Z
+1
+{ content: 'world. Successfully modified!',
+  createdAt: '2018-04-01T13:56:34.808Z',
+  user_id: '1',
+  updatedAt: '2018-04-01T13:56:35.687Z',
+  title: 'hello' }
+    ✓ Should return 200 status code (215ms)
+
+  DELETE /todo/:id
+    ✓ Should return 204 status code (219ms)
+
+
+  5 passing (2s)
+```
+
+DynamoDB에서 간단하게 CRUD작업하는 것을 확인할 수 있습니다.
+
+## IAM Role 생성하기
+
+실제로 API Gateway와 연동되서 동작하는 람다는 Role이 적절한 IAM Role이 부여되어 있어야 합니다.
+
+필요한 권한은 DynamoDB Todo Table CRUD 권한이기 때문에 
+[AWS Policy Generator](https://console.aws.amazon.com/iam/home?region=ap-northeast-2#/policies)를 통해 정책부터 생성해줍니다.
+
+정책 생성 버튼을 누른 다음 다음과 같이 JSON 편집을 합니다.
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:UpdateItem",
+                "dynamodb:GetRecords"
+            ],
+            "Resource": "arn:aws:dynamodb:ap-northeast-2:*:table/Todo"
+        }
+    ]
+}
+```
+
+마지막으로 다음과 같이 정책명과 설명을 입력하여줍니다.
+
+- Title: DynamoDBTodoTableCRUDPolicy
+- Description: DynamoDBTodoTableCRUDPolicy
+
+![dynamodb-policy](/images/dynamodb-policy.png)
+
+정책을 생성하였다면 [역할(Role)](https://console.aws.amazon.com/iam/home?region=ap-northeast-2#/roles)을 생성하여 줍니다.
+
+서비스는 Lambda를 선택하고 정책은 방금 생성한 DynamoDBTodoTableCRUDPolicy를 선택합니다.
+
+역할 이름은 ServerlessHandsOnRole 로 생성합니다.
+
+생성한 Role은 template.yaml의 lambdaPermission란에 이미 입력되어 있습니다. 따로 설정하지 않아도 괜찮습니다.
 
 
 ## References
+
 - [https://aws.amazon.com/ko/cloud9/](https://aws.amazon.com/ko/cloud9/)
