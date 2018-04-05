@@ -178,18 +178,35 @@ server.listen(port, () => console.log(`Server is running on ${port}`));
 ```js
 // lambda.js
 'use strict'
-const awsServerlessExpress = require('aws-serverless-express');
-const app = require('./app');
+const awsServerlessExpress = require('aws-serverless-express')
+const app = require('./app')
 const binaryMimeTypes = [
   'application/javascript',
   'application/json',
-  'text/html'
-];
+  'application/octet-stream',
+  'application/x-font-ttf',
+  'application/xml',
+  'font/eot',
+  'font/opentype',
+  'font/otf',
+  'font/woff',
+  'font/woff2',
+  'image/jpeg',
+  'image/png',
+  'image/svg+xml',
+  'text/comma-separated-values',
+  'text/css',
+  'text/html',
+  'text/javascript',
+  'text/plain',
+  'text/text',
+  'text/xml'
+]
 // 반드시 API Gateway setting에서 Binary Media Types 에 */* 넣어줄 것!
 
-const server = awsServerlessExpress.createServer(app, null, binaryMimeTypes);
-
-exports.handler = (event, context) => awsServerlessExpress.proxy(server, event, context);
+const server = awsServerlessExpress.createServer(app, null, binaryMimeTypes)
+ 
+exports.handler = (event, context) => awsServerlessExpress.proxy(server, event, context)
 ```
 
 ### serverless-api/routes/todo.js
@@ -356,7 +373,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: An AWS Serverless Specification template describing your function.
 Resources:
-  serverless:
+  serverlessHandsOn:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: index.handler
@@ -364,13 +381,13 @@ Resources:
       Description: ''
       MemorySize: 128
       Timeout: 15
-      Role: 
+      Role:
         'Fn::Sub': 'arn:aws:iam::${AWS::AccountId}:role/ServerlessHandsOnRole'
       Events:
         LambdaMicroservice:
           Type: Api
           Properties:
-            Path: /{proxy+}
+            Path: '/{proxy+}'
             Method: ANY
   lambdaPermission:
     Type: 'AWS::Lambda::Permission'
@@ -378,7 +395,7 @@ Resources:
       Action: 'lambda:InvokeFunction'
       FunctionName:
         'Fn::GetAtt':
-          - serverless
+          - serverlessHandsOn
           - Arn
       Principal: apigateway.amazonaws.com
       SourceArn:
@@ -518,6 +535,16 @@ DynamoDB에서 간단하게 CRUD작업하는 것을 확인할 수 있습니다.
 역할 이름은 ServerlessHandsOnRole 로 생성합니다.
 
 생성한 Role은 template.yaml의 lambdaPermission란에 이미 입력되어 있습니다. 따로 설정하지 않아도 괜찮습니다.
+
+## Cloud9에서 배포하기
+
+Cloud9을 통한 배포는 크게 어렵지 않습니다. 다음과 같이 오른쪽 위치에 Local Functions가 있습니다.
+여기에는 편집하고 있는 serverlessHandsOn으로 나타날 것입니다.
+우클릭을 하고 Deploy를 클릭하면 배포가 완료됩니다.
+
+배포가 완료되면 Local Functions 아래에 Remote Functions에 해당 람다를 확인할 수 있습니다.
+
+![c9-deploy](/images/c9-deploy.png)
 
 
 ## References
