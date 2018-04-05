@@ -5,7 +5,7 @@ Resources:
   serverlessHandsOn:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: index.handler
+      Handler: handler.api
       Runtime: nodejs6.10
       Description: ''
       MemorySize: 128
@@ -18,7 +18,7 @@ Resources:
           Properties:
             Path: '/{proxy+}'
             Method: ANY
-  lambdaPermission:
+  serverlessHandsOnPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'

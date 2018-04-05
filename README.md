@@ -106,15 +106,17 @@ $ npm init -y
   - aws-sdk : AWS 리소스를 사용하기 위한 SDK
   - aws-serverless-express : Express를 Lambda에서 사용할 수 있도록 Wrapping하는 패키지
   - dynamoose : DynamoDB를 사용하기 쉽도록 Modeling하는 도구
-- Dev-dependencies
   - dotenv : 환경 변수를 손쉽게 관리할 수 있게 하는 패키지
+- Dev-dependencies
   - mocha : 개발 도구
   - supertest : HTTP 테스트를 하기 위한 모듈
   - should: BDD(Behaviour-Driven Development)를 지원하기 위한 모듈
+  - serverless: Serverless Framework
+  - serverless-apigw-binary: Binary Media Type을 지원하기 위한 플러그인
 
 ```sh
 $ npm i -S express aws-sdk aws-serverless-express body-parser dynamoose
-$ npm i -D dotenv mocha should supertest
+$ npm i -D dotenv mocha should supertest serverless serverless-apigw-binary
 ```
 
 각 파일을 편집합니다.
@@ -206,7 +208,7 @@ const binaryMimeTypes = [
 
 const server = awsServerlessExpress.createServer(app, null, binaryMimeTypes)
  
-exports.handler = (event, context) => awsServerlessExpress.proxy(server, event, context)
+module.exports.api = (event, context) => awsServerlessExpress.proxy(server, event, context)
 ```
 
 ### serverless-api/routes/todo.js
@@ -364,42 +366,47 @@ describe("DELETE /todo/:id", () => {
 });
 ```
 
-마지막으로 template.yaml을 생성합니다. 이것은 Cloud9상에서 Lambda함수를 배포할 수 있도록 해주는 파일입니다.
+<!-- 마지막으로 template.yaml을 생성합니다. 이것은 Cloud9상에서 Lambda함수를 배포할 수 있도록 해주는 파일입니다. -->
+마지막으로 serverless.yml을 생성합니다. 이것은 Serverless Framework를 통해 AWS에 손쉽게 serverless 환경을 배포할 수 있게 도와줍니다.
+내부적으로는 CloudFormation Template을 생성하여 배포합니다. 배포된 Artifact는 S3에서 확인해볼 수 있습니다.
 
-### serverless-api/template.yaml
+### serverless-api/serverless.yml
 
 ```yml
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: 'AWS::Serverless-2016-10-31'
-Description: An AWS Serverless Specification template describing your function.
-Resources:
+service: ServerlessHandsOn
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorySize: 128
+  stage: dev
+  region: ap-northeast-2
+  environment:
+    NODE_ENV: production
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:*"
+
+plugins:
+ - serverless-apigw-binary
+custom:
+  apigwBinary:
+    types:
+      - '*/*'
+
+functions:
   serverlessHandsOn:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Handler: index.handler
-      Runtime: nodejs6.10
-      Description: ''
-      MemorySize: 128
-      Timeout: 15
-      Role:
-        'Fn::Sub': 'arn:aws:iam::${AWS::AccountId}:role/ServerlessHandsOnRole'
-      Events:
-        LambdaMicroservice:
-          Type: Api
-          Properties:
-            Path: '/{proxy+}'
-            Method: ANY
-  lambdaPermission:
-    Type: 'AWS::Lambda::Permission'
-    Properties:
-      Action: 'lambda:InvokeFunction'
-      FunctionName:
-        'Fn::GetAtt':
-          - serverlessHandsOn
-          - Arn
-      Principal: apigateway.amazonaws.com
-      SourceArn:
-        'Fn::Sub': 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/*/*/*'
+    handler: handler.api
+    events:
+      - http: ANY {proxy+}
 ```
 
 ---
@@ -488,64 +495,57 @@ ap-northeast-2
 
 DynamoDB에서 간단하게 CRUD작업하는 것을 확인할 수 있습니다.
 
-## IAM Role 생성하기
-
-실제로 API Gateway와 연동되서 동작하는 람다는 Role이 적절한 IAM Role이 부여되어 있어야 합니다.
-
-필요한 권한은 DynamoDB Todo Table CRUD 권한이기 때문에 
-[AWS Policy Generator](https://console.aws.amazon.com/iam/home?region=ap-northeast-2#/policies)를 통해 정책부터 생성해줍니다.
-
-정책 생성 버튼을 누른 다음 다음과 같이 JSON 편집을 합니다.
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:UpdateItem",
-                "dynamodb:GetRecords"
-            ],
-            "Resource": "arn:aws:dynamodb:ap-northeast-2:*:table/Todo"
-        }
-    ]
-}
-```
-
-마지막으로 다음과 같이 정책명과 설명을 입력하여줍니다.
-
-- Title: DynamoDBTodoTableCRUDPolicy
-- Description: DynamoDBTodoTableCRUDPolicy
-
-![dynamodb-policy](/images/dynamodb-policy.png)
-
-정책을 생성하였다면 [역할(Role)](https://console.aws.amazon.com/iam/home?region=ap-northeast-2#/roles)을 생성하여 줍니다.
-
-서비스는 Lambda를 선택하고 정책은 방금 생성한 DynamoDBTodoTableCRUDPolicy를 선택합니다.
-
-역할 이름은 ServerlessHandsOnRole 로 생성합니다.
-
-생성한 Role은 template.yaml의 lambdaPermission란에 이미 입력되어 있습니다. 따로 설정하지 않아도 괜찮습니다.
-
 ## Cloud9에서 배포하기
 
-Cloud9을 통한 배포는 크게 어렵지 않습니다. 다음과 같이 오른쪽 위치에 Local Functions가 있습니다.
+<!-- Cloud9을 통한 배포는 크게 어렵지 않습니다. 다음과 같이 오른쪽 위치에 Local Functions가 있습니다.
 여기에는 편집하고 있는 serverlessHandsOn으로 나타날 것입니다.
 우클릭을 하고 Deploy를 클릭하면 배포가 완료됩니다.
 
 배포가 완료되면 Local Functions 아래에 Remote Functions에 해당 람다를 확인할 수 있습니다.
 
-![c9-deploy](/images/c9-deploy.png)
+![c9-deploy](/images/c9-deploy.png) -->
+Node가 8.x버전이 설치되어 있으면 dev-dependency에 설치된 serverless 명령어를 바로 사용할 수 있습니다.
+하지만 현재(2018-04-07)의 기준으로 Cloud9은 node 6.x버전을 지원하기 때문에 Global로 serverless를 설치하여 줍니다.
 
+```sh
+ec2-user:~/environment/serverless-todo-demo/serverless-api (master) $ npm i -g serverless
+```
+
+설치가 완료되었으면 배포를 합니다.
+
+```sh
+ec2-user:~/environment/serverless-todo-demo/serverless-api (master) $ serverless deploy
+Serverless: Packaging service...
+Serverless: Excluding development dependencies...
+Serverless: Uploading CloudFormation file to S3...
+Serverless: Uploading artifacts...
+Serverless: Uploading service .zip file to S3 (8.02 MB)...
+Serverless: Validating template...
+Serverless: Updating Stack...
+Serverless: Checking Stack update progress...
+..............
+Serverless: Stack update finished...
+Service Information
+service: ServerlessHandsOn
+stage: dev
+region: ap-northeast-2
+stack: ServerlessHandsOn-dev
+api keys:
+  None
+endpoints:
+  ANY - https://YOUR_CLOUD_FRONT_URL/dev/{proxy+}
+functions:
+  serverlessHandsOn: ServerlessHandsOn-dev-serverlessHandsOn
+Serverless: 'Too many requests' received, sleeping 5 seconds
+Serverless: 'Too many requests' received, sleeping 5 seconds
+```
+
+위와같이 배포되었으면 URL에 접속하여 실제 동작하는지 확인합니다.
+
+```sh
+ec2-user:~/environment/serverless-todo-demo/serverless-api (master) $ curl https://YOUR_CLOUD_FRONT_URL/dev/{proxy+}
+[]
+```
 
 ## References
 
