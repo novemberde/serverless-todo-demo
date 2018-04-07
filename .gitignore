@@ -58,3 +58,7 @@ typings/
 .env
 
 .serverless
+
+# parcel bundler
+.cache/
+dist/

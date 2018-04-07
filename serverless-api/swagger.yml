@@ -19,7 +19,7 @@ paths:
                 {
                   "user_id": "1",
                   "createdAt": "2018-03-24T16:00:51.278Z",
-                  "title": "hello"
+                  "title": "hello",
                   "content": "world. Successfully modified!",
                   "updatedAt": "2018-03-24T16:00:52.135Z"
                 }
@@ -46,7 +46,7 @@ paths:
               {
                 "user_id": "1",
                 "createdAt": "2018-03-24T16:00:51.278Z",
-                "title": "hello"
+                "title": "hello",
                 "content": "world. Successfully modified!",
                 "updatedAt": "2018-03-24T16:00:52.135Z"
               }
@@ -65,7 +65,7 @@ paths:
               {
                 "user_id": "1",
                 "createdAt": "2018-03-24T16:00:51.278Z",
-                "title": "hello"
+                "title": "hello",
                 "content": "world. Successfully modified!",
                 "updatedAt": "2018-03-24T16:00:51.278Z"
               }
@@ -91,7 +91,7 @@ paths:
               {
                 "user_id": "1",
                 "createdAt": "2018-03-24T16:00:51.278Z",
-                "title": "hello"
+                "title": "hello",
                 "content": "world. Successfully modified!",
                 "updatedAt": "2018-03-24T16:00:51.278Z"
               }
