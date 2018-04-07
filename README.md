@@ -406,7 +406,10 @@ functions:
   serverlessHandsOn:
     handler: handler.api
     events:
-      - http: ANY {proxy+}
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
 ```
 
 ---
