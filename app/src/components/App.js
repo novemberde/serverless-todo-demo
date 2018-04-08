@@ -1,3 +1,4 @@
+import 'setimmediate'
 import React from 'react'
 import styled from 'styled-components'
 import oc from 'open-color'
@@ -6,6 +7,7 @@ import MaterialUiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { List, ListItem } from 'material-ui/List'
 import { TextField, RaisedButton } from 'material-ui'
 import Top from './Top'
+import $ from 'jquery'
 
 const App = styled.div``
 
@@ -40,13 +42,21 @@ export default class extends React.Component {
     this.fetchItems()
   }
   addItem() {
-    // console.log(this.state.inputText)
-    axios.post('https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo/', {
+    // axios.post('https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo/', {
+    //   title: this.state.inputText,
+    //   contents: '',
+    //   createdAt: Date.now(),
+    //   updatedAt: Date.now(),
+    // }).then(this.fetchItems)
+    $.post( "https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo", {
       title: this.state.inputText,
       contents: '',
       createdAt: Date.now(),
       updatedAt: Date.now(),
-    }).then(this.fetchItems)
+    }).done(() => {
+      this.setState({inputText: ""});
+      this.fetchItems();
+    });
   }
   fetchItems() {
     axios.get('https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo/')

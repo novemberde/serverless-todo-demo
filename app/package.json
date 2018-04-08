@@ -14,10 +14,12 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "jquery": "^3.3.1",
     "material-ui": "^0.20.0",
     "open-color": "^1.6.3",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "setimmediate": "^1.0.5",
     "styled-components": "^3.2.5"
   }
 }
