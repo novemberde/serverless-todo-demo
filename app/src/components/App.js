@@ -30,13 +30,36 @@ export default class extends React.Component {
     super(props)
     this.state = {
       items: [],
+      inputText: '',
     }
+    this.fetchItems = this.fetchItems.bind(this)
+    this.addItem = this.addItem.bind(this)
+    this.onChangeTextField = this.onChangeTextField.bind(this)
   }
   componentWillMount() {
+    this.fetchItems()
+  }
+  addItem() {
+    // console.log(this.state.inputText)
+    axios.post('https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo/', {
+      title: this.state.inputText,
+      contents: '',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    }).then(this.fetchItems)
+  }
+  fetchItems() {
     axios.get('https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo/')
-      .then((result) => {
-        console.log(result)
+      .then(({ data }) => {
+        this.setState({
+          items: data,
+        })
       })
+  }
+  onChangeTextField(event) {
+    this.setState({
+      inputText: event.target.value,
+    })
   }
   render() {
     return (
@@ -44,13 +67,15 @@ export default class extends React.Component {
         <App>
           <Top />
           <Input>
-            <StyledTextField floatingLabelText="새 할 일을 입력하세요" />
-            <StyledRaisedButton label="추가" primary={true} />
+            <StyledTextField floatingLabelText="새 할 일을 입력하세요" value={this.state.inputText} onChange={this.onChangeTextField}/>
+            <StyledRaisedButton label="추가" primary={true} onClick={this.addItem} />
           </Input>
           <List>
-            <StyledListItem primaryText="hello!"/>
-            <StyledListItem primaryText="hello!"/>
-            <StyledListItem primaryText="hello!"/>
+            {
+              this.state.items.map((item) => (
+                <StyledListItem key={item.createdAt} primaryText={item.title}/>
+              ))
+            }
           </List>
         </App>
       </MaterialUiThemeProvider>
