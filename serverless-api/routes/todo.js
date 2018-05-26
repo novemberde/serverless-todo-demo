@@ -13,6 +13,8 @@ const Todo = dynamoose.model('Todo', {
     updatedAt: String,
     title: String,
     content: String
+}, {
+    create: false, // Create table in DB, if it does not exist,
 });
 
 router.get("/", (req, res, next) => {
