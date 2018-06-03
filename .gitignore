@@ -64,3 +64,4 @@ typings/
 dist/
 
 package-lock.json
+config.yml
