@@ -5,7 +5,7 @@
   "author": "Jee Hyuk Won (Tony) <jee@hyuk.io>",
   "license": "MIT",
   "scripts": {
-    "dev": "npx parcel src/index.html"
+    "start": "npx parcel src/index.html"
   },
   "devDependencies": {
     "babel-plugin-styled-components": "^1.5.1",
