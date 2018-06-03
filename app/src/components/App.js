@@ -9,6 +9,10 @@ import { TextField, RaisedButton } from 'material-ui'
 import Top from './Top'
 import $ from 'jquery'
 
+const baseURL = 'https://w1oefi6dgj.execute-api.ap-northeast-2.amazonaws.com/dev/';
+const myAxios = axios.create({
+  baseURL
+});
 const App = styled.div``
 
 const Input = styled.div`
@@ -42,15 +46,9 @@ export default class extends React.Component {
     this.fetchItems()
   }
   addItem() {
-    // axios.post('https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo/', {
-    //   title: this.state.inputText,
-    //   contents: '',
-    //   createdAt: Date.now(),
-    //   updatedAt: Date.now(),
-    // }).then(this.fetchItems)
-    $.post( "https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo", {
+    $.post( `${baseURL}/todo/`, {
       title: this.state.inputText,
-      contents: '',
+      content: '',
       createdAt: Date.now(),
       updatedAt: Date.now(),
     }).done(() => {
@@ -59,7 +57,7 @@ export default class extends React.Component {
     });
   }
   fetchItems() {
-    axios.get('https://dd8ij2r45a.execute-api.ap-northeast-2.amazonaws.com/dev/todo/')
+    myAxios.get('todo/')
       .then(({ data }) => {
         this.setState({
           items: data,
