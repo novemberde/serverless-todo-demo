@@ -438,7 +438,14 @@ functions:
           cors: true
 ```
 
+** 위에서 살펴보면 app.js와 serverless.yml에 cors관련 옵션이 있습니다. 보안 상의 이유로, 브라우저들은 스크립트 내에서 초기화되는 
+cross-origin HTTP 요청을 제한하기 때문에 별도로 API Gateway에서 허용을 해주고, 실제로 동작하는 Lambda에서도 서버처럼 동작하기 때문에
+옵션을 추가해야됩니다. 이에 대한 자세한 내용은 
+[HTTP 접근 제어 (CORS)](https://developer.mozilla.org/ko/docs/Web/HTTP/Access_control_CORS)에서
+확인할 수 있습니다.
+
 ---
+
 
 모든 파일을 편집하였다면 서버를 가동해봅니다.
 
@@ -575,6 +582,31 @@ Serverless: 'Too many requests' received, sleeping 5 seconds
 ec2-user:~/environment/serverless-todo-demo/serverless-api (master) $ curl https://YOUR_CLOUD_FRONT_URL/dev/{proxy+}
 []
 ```
+
+## Static Web Site에서 API 호출해보기
+
+지금까지 API를 구성해보았습니다. API만드로도 서비스가 가능할까요?
+이를 호출할 클라이언트가 없다면 서비스가 될 수 없을 겁니다.
+작성한 node server에서 Web site를 뿌려주는 Server Side Rendering방식을 택할 수도있습니다.
+그렇지만 이번에는 Static Web Site를 하나의 앱이라고 생각하고
+데이터만 서버에 요청하여 UI에 반영하려고 합니다.
+작업한 내용이 어떻게 표현되는지 확인하고,
+CloudFront + S3로 Static Web Site를 호스팅해봅시다.
+
+첫 번째로, [Git repository](https://github.com/novemberde/serverless-todo-demo.git)를 가져옵니다.
+
+```sh
+# Work directory로 이동
+ec2-user:~/environment $ cd ~/environment
+
+# Git repository clone하기
+ec2-user:~/environment $ git clone https://github.com/novemberde/serverless-todo-demo.git
+
+# Static Web Site를 구성한 directory로 이동
+ec2-user:~/environment $ cd serverless-todo-demo/app
+```
+
+
 
 ## References
 
