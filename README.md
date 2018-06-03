@@ -12,10 +12,11 @@ Amazon Web Service 를 활용하여 Serverless architecture로 구성된 API를 
 AWS에서 사용하는 리소스는 다음과 같습니다.
 
 - Cloud9: 코드 작성, 실행 및 디버깅을 위한 클라우드 기반 IDE.
-- EC2: 클라우드에서 확장식 컴퓨팅을 제공. 여기서는 Cloud9을 동작하기 위해 사용한다.
+- EC2: 클라우드에서 확장식 컴퓨팅을 제공. 여기서는 Cloud9을 동작하기 위해 사용.
 - API Gateway : API를 생성, 게시, 유지 관리, 모니터링 및 보호할 수 있게 해주는 서비스.
 - Lambda: 서버를 프로비저닝하거나 관리하지 않고도 코드를 실행할 수 있게 해주는 컴퓨팅 서비스. 서버리스 아키텍쳐의 핵심 서비스.
 - DynamoDB: 완벽하게 관리되는 NoSQL 데이터베이스 서비스로, 원활한 확장성과 함께 빠르고 예측 가능한 성능을 제공.
+- S3: 어디서나 원하는 양의 데이터를 저장하고 검색할 수 있도록 구축된 객체 스토리지. 소스코드의 저장소로 활용할 예정.
 
 ## Cloud 9 시작하기
 
@@ -69,6 +70,23 @@ Preferences(설정 화면)에서 ap-northeast-2(Seoul Region)으로 바꾸어줍
 
 - Preferences > AWS Settings > Region > Asia Pacific(Seoul)
 
+## S3 Bucket 생성하기
+
+S3는 Object Storage로 쉽게 설명하자면 하나의 저장소입니다. 파일들을 업로드 / 다운로드 할 수 있으며 AWS에서 핵심적인 서비스 중 하나입니다.
+여러 방면으로 활용할 수 있지만 여기서는 소스코드의 저장소 역할을 합니다.
+
+S3의 메인으로 가서 버킷 생성하기 버튼을 클릭합니다.
+
+![s3-create-btn.png](/images/s3-create-btn.png)
+
+아래와 같이 입력하고 생성버튼을 클릭합니다.
+
+- 버킷 이름(Bucket name): USERNAME-serverless-hands-on-1   // 여기서 USERNAME을 수정합니다. ex) khbyun-serverless-hands-on-1
+- 리전(Region): 아시아 태평양(서울)
+
+![s3-create-btn.png](/images/s3-create-1.png)
+
+
 ## Node Express api server 만들어보기
 
 파일 트리는 다음과 같습니다.
@@ -84,7 +102,7 @@ environment
 │   │   └── todo.spec.js : /todo 를 테스트 하는 spec 파일
 │   ├── app.js : express 서버
 │   ├── handler.js  : express를 wrapping하기 위한 handler
-│   ├── .env : local에서 테스트하기 위한 환경 변수
+│   ├── config.yml : serverless.yml에서 사용하기 위한 변수
 │   ├── package.json
 │   └── template.yaml : Serverless Application Model Template
 └── static-web-front : SPA 방식의 Web Front
@@ -107,6 +125,7 @@ $ npm init -y
   - aws-serverless-express : Express를 Lambda에서 사용할 수 있도록 Wrapping하는 패키지
   - dynamoose : DynamoDB를 사용하기 쉽도록 Modeling하는 도구
   - dotenv : 환경 변수를 손쉽게 관리할 수 있게 하는 패키지
+  - cors : 손쉽게 cors를 허용하는 미들웨어
 - Dev-dependencies
   - mocha : 개발 도구
   - supertest : HTTP 테스트를 하기 위한 모듈
@@ -115,16 +134,18 @@ $ npm init -y
   - serverless-apigw-binary: Binary Media Type을 지원하기 위한 플러그인
 
 ```sh
-$ npm i -S express aws-sdk aws-serverless-express body-parser dynamoose
-$ npm i -D dotenv mocha should supertest serverless serverless-apigw-binary
+$ npm i -S express aws-sdk aws-serverless-express body-parser dynamoose dotenv
+$ npm i -D mocha should supertest serverless serverless-apigw-binary
 ```
 
 각 파일을 편집합니다.
 
-### serverless-api/.env
+### serverless-api/config.yml
 
-```txt
-AWS_REGION=ap-northeast-2
+```yml
+AWS_REGION: ap-northeast-2
+STAGE: dev
+DEPLOYMENT_BUCKET: ${USERNAME}-serverless-hands-on-1    # USERNAME 수정 필요!
 ```
 
 ### serverless-api/app.js
@@ -132,15 +153,18 @@ AWS_REGION=ap-northeast-2
 ```js
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
-require('dotenv').config();
 
+require("aws-sdk").config.region = "ap-northeast-2"
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // 실제로 사용한다고 가정하면 유저정보를 실어주어야함.
 app.use((req, res, next) => {
-    res.locals.user_id = "1";
+    res.locals.userId = "1";
     next();
 });
 
@@ -204,7 +228,6 @@ const binaryMimeTypes = [
   'text/text',
   'text/xml'
 ]
-// 반드시 API Gateway setting에서 Binary Media Types 에 */* 넣어줄 것!
 
 const server = awsServerlessExpress.createServer(app, null, binaryMimeTypes)
  
@@ -218,10 +241,10 @@ const router = require("express").Router();
 const dynamoose = require('dynamoose');
 const _ = require('lodash');
 const Todo = dynamoose.model('Todo', {
-    user_id: {
+    userId: {
         type: String,
         hashKey: true
-    },
+    }, 
     createdAt: {
         type: String,
         rangeKey: true
@@ -229,76 +252,78 @@ const Todo = dynamoose.model('Todo', {
     updatedAt: String,
     title: String,
     content: String
+}, {
+    create: false, // Create a table if not exist,
 });
 
 router.get("/", (req, res, next) => {
-    const user_id = res.locals.user_id;
+    const userId = res.locals.userId;
     let lastKey = req.query.lastKey;
-
-    return Todo.query('user_id').eq(user_id).startAt(lastKey).limit(10).exec((err, result) => {
+    
+    return Todo.query('userId').eq(userId).startAt(lastKey).limit(200).exec((err, result) => {
         if(err) return next(err, req, res, next);
-
+        
         res.status(200).json(result);
     })
 });
 
 router.get("/:createdAt", (req, res, next) => {
-    const user_id = res.locals.user_id;
+    const userId = res.locals.userId;
     const createdAt = String(req.params.createdAt);
 
-    return Todo.get({user_id, createdAt}, function (err, result) {
+    return Todo.get({userId, createdAt}, function (err, result) {
         if(err) return next(err, req, res, next);
-
+      
         res.status(200).json(result);
     });
 });
 
 router.post("/", (req, res, next) => {
-    const user_id = res.locals.user_id;
+    const userId = res.locals.userId;
     const body = req.body;
-
+    
     body.createdAt = new Date().toISOString();
     body.updatedAt = new Date().toISOString();
-    body.user_id = user_id;
-
+    body.userId = userId;
+    
     return new Todo(body).save((err, result) => {
         if(err) return next(err, req, res, next);
-
+      
         res.status(201).json(result);
     });
 });
 
 router.put("/:createdAt", (req, res, next) => {
-    const user_id = res.locals.user_id;
+    const userId = res.locals.userId;
     const createdAt = req.params.createdAt;
     const body = req.body;
-
+    
     if(body.createdAt) delete body.createdAt;
-
+    
     body.updatedAt = new Date().toISOString(); 
-
+    
     return new Todo(_.assign(body, {
-        user_id,
+        userId,
         createdAt
     })).save((err, result) => {
         if(err) return next(err, req, res, next);
-
+      
         res.status(200).json(result);
     });
 });
 
 router.delete("/:createdAt", (req, res, next) => {
     const createdAt = req.params.createdAt;
-    const user_id = res.locals.user_id;
-
+    const userId = res.locals.userId;
+    
     if(!createdAt) return res.status(400).send("Bad request. createdAt is undefined");
-
+    
     return Todo.delete({
-        user_id,
+        userId,
         createdAt
     }, (err) => {
         if(err) return next(err, req, res, next);
-
+      
         res.status(204).json();
     });
 });
@@ -379,8 +404,9 @@ provider:
   name: aws
   runtime: nodejs8.10
   memorySize: 128
-  stage: dev
-  region: ap-northeast-2
+  stage:  ${file(./config.yml):STAGE}
+  region: ${file(./config.yml):AWS_REGION}
+  deploymentBucket: ${file(./config.yml):DEPLOYMENT_BUCKET}
   environment:
     NODE_ENV: production
   iamRoleStatements:
@@ -406,7 +432,10 @@ functions:
   serverlessHandsOn:
     handler: handler.api
     events:
-      - http: ANY {proxy+}
+      - http: 
+          path: /{proxy+}
+          method: ANY
+          cors: true
 ```
 
 ---
@@ -440,10 +469,10 @@ DynamoDB를 설계할 시 주의해야할 점은 [FAQ](https://aws.amazon.com/ko
 
 이제 DynamoDB에 Todo table을 생성할 것입니다. 파티션 키와 정렬 키는 다음과 같이 설정합니다.
 
-- 파티션키(Partition Key): user_id
+- 파티션키(Partition Key): userId
 - 정렬키(Sort Key): createdAt
 
-소스코드 상에서는 user_id를 "1"로 고정시켜두었습니다. 일반적으로 유저의 키값을 partition key로 사용하기 때문입니다.
+소스코드 상에서는 userId를 "1"로 고정시켜두었습니다. 일반적으로 유저의 키값을 partition key로 사용하기 때문입니다.
 또한 레코드의 생성 시간을 정렬키로 사용합니다.
 
 그럼 [DynamoDB Console](https://ap-northeast-2.console.aws.amazon.com/dynamodb/home?region=ap-northeast-2#)로 이동합니다.
@@ -471,7 +500,7 @@ ap-northeast-2
   GET /todo
 [ { content: 'world. Successfully modified!',
     createdAt: '2018-04-01T13:56:34.808Z',
-    user_id: '1',
+    userId: '1',
     updatedAt: '2018-04-01T13:56:35.687Z',
     title: 'hello' } ]
     ✓ Should return 200 status code (224ms)
@@ -481,7 +510,7 @@ ap-northeast-2
 1
 { content: 'world. Successfully modified!',
   createdAt: '2018-04-01T13:56:34.808Z',
-  user_id: '1',
+  userId: '1',
   updatedAt: '2018-04-01T13:56:35.687Z',
   title: 'hello' }
     ✓ Should return 200 status code (215ms)
