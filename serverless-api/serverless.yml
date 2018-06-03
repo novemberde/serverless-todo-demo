@@ -4,8 +4,9 @@ provider:
   name: aws
   runtime: nodejs8.10
   memorySize: 128
-  stage: dev
-  region: ap-northeast-2
+  stage:  ${file(./config.yml):STAGE}
+  region: ${file(./config.yml):AWS_REGION}
+  deploymentBucket: ${file(./config.yml):DEPLOYMENT_BUCKET}
   environment:
     NODE_ENV: production
   iamRoleStatements:
@@ -31,4 +32,7 @@ functions:
   serverlessHandsOn:
     handler: handler.api
     events:
-      - http: ANY {proxy+}
+      - http: 
+          path: /{proxy+}
+          method: ANY
+          cors: true
