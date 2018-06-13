@@ -18,6 +18,144 @@ AWS에서 사용하는 리소스는 다음과 같습니다.
 - DynamoDB: 완벽하게 관리되는 NoSQL 데이터베이스 서비스로, 원활한 확장성과 함께 빠르고 예측 가능한 성능을 제공.
 - S3: 어디서나 원하는 양의 데이터를 저장하고 검색할 수 있도록 구축된 객체 스토리지. 소스코드의 저장소로 활용할 예정.
 
+## [Serverless Framework](https://serverless.com/)
+
+![serverless framework main](/images/serverless-framework-1.png)
+
+Serverless Framework 메인에 나와있는 소개문구는 다음과 같습니다.
+
+Serverless is your toolkit for deploying and operating serverless architectures.
+Focus on your application, not your infrastructure.
+
+위 내용을 번역한 내용은 "Serverless는 서버 없는 아키텍처를 배치하고 운영하기 위한 툴킷입니다. 인프라가 아닌 애플리케이션에 집중합니다." 입니다.
+이처럼 Serverless framework는 Serverless architecture를 운영하기 위한 툴이라고 생각하면 됩니다.
+
+그러면 serverless framework를 사용하기 위한 환경은 어떻게 될까요?
+
+node.js가 설치되어 있는 환경에서 사용할 수 있습니다.
+
+open source로 기여하고 싶다면 [https://github.com/serverless/serverless](https://github.com/serverless/serverless)에서 issue와 pull request를 등록해주세요.
+
+### Serverless Framework 살펴보기
+
+Serverless Framework를 사용하기 위해서 명령어들을 살펴봅시다.
+
+```sh
+# Serverless Framework를 설치합니다.
+$ npm i -g serverless
+
+# 명령어들을 확인해봅니다.
+$ serverless --help
+
+Commands
+* You can run commands with "serverless" or the shortcut "sls"
+* Pass "--verbose" to this command to get in-depth plugin info
+* Pass "--no-color" to disable CLI colors
+* Pass "--help" after any <command> for contextual help
+
+Framework
+* Documentation: https://serverless.com/framework/docs/
+
+config ........................ Configure Serverless
+config credentials ............ Configures a new provider profile for the Serverless Framework
+create ........................ Create new Serverless service
+deploy ........................ Deploy a Serverless service
+deploy function ............... Deploy a single function from the service
+deploy list ................... List deployed version of your Serverless Service
+deploy list functions ......... List all the deployed functions and their versions
+info .......................... Display information about the service
+install ....................... Install a Serverless service from GitHub or a plugin from the Serverless registry
+invoke ........................ Invoke a deployed function
+invoke local .................. Invoke function locally
+logs .......................... Output the logs of a deployed function
+metrics ....................... Show metrics for a specific function
+package ....................... Packages a Serverless service
+plugin ........................ Plugin management for Serverless
+plugin install ................ Install and add a plugin to your service
+plugin uninstall .............. Uninstall and remove a plugin from your service
+plugin list ................... Lists all available plugins
+plugin search ................. Search for plugins
+print ......................... Print your compiled and resolved config file
+remove ........................ Remove Serverless service and all resources
+rollback ...................... Rollback the Serverless service to a specific deployment
+rollback function ............. Rollback the function to the previous version
+slstats ....................... Enable or disable stats
+
+Platform (Beta)
+* The Serverless Platform is currently in experimental beta. Follow the docs below to get started.
+* Documentation: https://serverless.com/platform/docs/
+
+emit .......................... Emits an event to a running Event Gateway
+login ......................... Login or sign up for the Serverless Platform
+logout ........................ Logout from the Serverless Platform
+run ........................... Runs the Event Gateway and the Emulator
+
+Plugins
+AwsConfigCredentials, Config, Create, Deploy, Emit, Info, Install, Invoke, Login, Logout, Logs, Metrics, Package, Plugin, PluginInstall, PluginList, PluginSearch, PluginUninstall, Print, Remove, Rollback, Run, SlStats
+```
+
+여기서 자주 사용하게 될 명령어는 다음과 같습니다.
+
+- create: 프로젝트 생성시 사용
+- deploy: 배포할 때 사용
+- package: 배포될 패키지의 구조를 보고싶을 때 사용
+- invoke: 특정 handler를 동작시킬 때 사용
+- remove: 배포된 리소스를 제거할 때 사용
+
+간단하게 로컬에서 serverless 명령어를 테스트해봅시다. deploy명령어는 아직 AWS권한이 없기 때문에 사용하지 않습니다.
+
+```sh
+# Global 로 serverless framework 설치
+$ npm i -g serverless
+
+# serverless service 생성 힌트 받기
+$ serverless create --help
+Plugin: Create
+create ........................ Create new Serverless service
+    --template / -t .................... Template for the service. Available templates: "aws-nodejs", "aws-nodejs-typescript", "aws-nodejs-ecma-script", "aws-python", "aws-python3", "aws-groovy-gradle", "aws-java-maven", "aws-java-gradle", "aws-kotlin-jvm-maven", "aws-kotlin-jvm-gradle", "aws-kotlin-nodejs-gradle", "aws-scala-sbt", "aws-csharp", "aws-fsharp", "aws-go", "aws-go-dep", "azure-nodejs", "fn-nodejs", "fn-go", "google-nodejs", "kubeless-python", "kubeless-nodejs", "openwhisk-java-maven", "openwhisk-nodejs", "openwhisk-php", "openwhisk-python", "openwhisk-swift", "spotinst-nodejs", "spotinst-python", "spotinst-ruby", "spotinst-java8", "webtasks-nodejs", "plugin" and "hello-world"
+    --template-url / -u ................ Template URL for the service. Supports: GitHub, BitBucket
+    --template-path .................... Template local path for the service.
+    --path / -p ........................ The path where the service should be created (e.g. --path my-service)
+    --name / -n ........................ Name for the service. Overwrites the default name of the created service. ## "
+
+# node를 사용하므로 템플릿을 "aws-nodejs" 로 "sample-app" 생성하기
+$ serverless create -t "aws-nodejs" -p sample-app
+
+# sample-app에서 명령어 연습하기
+$ cd sample-app
+~/sample-app $ serverless package
+Serverless: Packaging service...
+Serverless: Excluding development dependencies...
+
+# 여기까지 진행했다면 .serverless 디렉터리를 확인할 수 있습니다.
+~/sample-app $ cd .serverless
+
+# 생성된 파일을 보면 다음과 같음을 알 수 있습니다.
+~/sample-app/.serverless $ ls
+cloudformation-template-create-stack.json
+cloudformation-template-update-stack.json
+sample-app.zip
+serverless-state.json
+```
+
+위에 생성된 파일이 어떻게 동작하는지는 파일명만으로도 유추할 수 있습니다.
+
+현재 cloudformation에 stack이 존재하지 않을 경우 스택을 생성한 다음,
+업데이트를 하여 원하는 코드가 Lambda에 배포되도록 하는 것입니다.
+
+serverless-state.json파일은 해당 버전의 serverless application에 대한
+정보가 담겨 있습니다.
+
+```sh
+# 다시 앱의 루트디렉터리로 돌와와서 invoke를 해보겠습니다.
+~/sample-app/.serverless $ cd ..
+~/sample-app $ serverless invoke local --function hello
+{
+    "statusCode": 200,
+    "body": "{\"message\":\"Go Serverless v1.0! Your function executed successfully!\",\"input\":\"\"}"
+}
+```
+
 ## Cloud 9 시작하기
 
 Cloud9 은 하나의 IDE입니다. 그렇지만 이전의 설치형 IDE와는 다릅니다. 설치형 IDE는 로컬 PC에 프로그램을 설치하던가
