@@ -746,6 +746,15 @@ ec2-user:~/environment $ cd serverless-todo-demo/app
 
 
 
+## 하나 더! 서버리스 테스트하기
+
+여기는 도커를 아는 분에 한해서 사용하실 수 있습니다.
+알고보면 Lambda가 내부적으로 Docker container가 올라가는 형태인데요,
+그렇다면 Docker를 활용해서 로컬에서 테스트해볼 수 있지 않을까요?
+
+
+
+
 ## References
 
 - [https://aws.amazon.com/ko/cloud9/](https://aws.amazon.com/ko/cloud9/)
