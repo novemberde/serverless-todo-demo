@@ -13,12 +13,13 @@
     "parcel-bundler": "^1.7.0"
   },
   "dependencies": {
+    "@material-ui/core": "^1.2.1",
     "axios": "^0.18.0",
     "jquery": "^3.3.1",
     "material-ui": "^0.20.0",
     "open-color": "^1.6.3",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
     "setimmediate": "^1.0.5",
     "styled-components": "^3.2.5"
   }
