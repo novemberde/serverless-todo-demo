@@ -6,13 +6,13 @@ import axios from 'axios'
 import MaterialUiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { List, ListItem } from 'material-ui/List'
 import { TextField, RaisedButton } from 'material-ui'
+import Grid from '@material-ui/core/Grid';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Top from './Top'
 import $ from 'jquery'
 
-const baseURL = 'https://w1oefi6dgj.execute-api.ap-northeast-2.amazonaws.com/dev/';
-const myAxios = axios.create({
-  baseURL
-});
+const baseURL = 'https://l7dooy4d39.execute-api.ap-northeast-2.amazonaws.com/dev';
 const App = styled.div``
 
 const Input = styled.div`
@@ -27,8 +27,13 @@ const StyledRaisedButton = styled(RaisedButton)`
   height: 2.25rem;
   margin: 1rem 0 0 2rem;
 `
+const StyledRaisedDeleteButton = styled(RaisedButton)`
+  height: 2.25rem;
+  margin: 0.4rem 0 0 1rem;
+`
 const StyledListItem = styled(ListItem)`
   padding: 4rem;
+  flex: 1;
 `
 
 export default class extends React.Component {
@@ -40,7 +45,9 @@ export default class extends React.Component {
     }
     this.fetchItems = this.fetchItems.bind(this)
     this.addItem = this.addItem.bind(this)
-    this.onChangeTextField = this.onChangeTextField.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleKeyUp = this.handleKeyUp.bind(this)
+    this.deleteItem = this.deleteItem.bind(this)
   }
   componentWillMount() {
     this.fetchItems()
@@ -57,17 +64,42 @@ export default class extends React.Component {
     });
   }
   fetchItems() {
-    myAxios.get('todo/')
-      .then(({ data }) => {
-        this.setState({
-          items: data,
-        })
+    axios.get(`${baseURL}/todo/`).then(({ data }) => {
+      this.setState({
+        items: data,
       })
-  }
-  onChangeTextField(event) {
-    this.setState({
-      inputText: event.target.value,
     })
+  }
+  handleChange(e) {
+    this.setState({
+      inputText: e.target.value,
+    })
+  }
+  handleKeyUp(e) {
+    if(e.keyCode === 13) {
+      this.addItem();
+    }
+  }
+  deleteItem(createdAt) {
+    // axios.delete(`${baseURL}/todo/${createdAt}`).then(({ data }) => {
+    // });
+    // return
+    $.ajax({
+      url: `${baseURL}/todo/${createdAt}`,
+      method: 'delete',
+      contentType: 'application/json',
+      success: function(result) {
+        this.fetchItems();
+      }
+    });
+    // $.ajax({
+    //   url: `${baseURL}/todo/${createdAt}`,
+    //   method: "DELETE",
+    //   contentType: "application/x-www-form-urlencoded",
+    //   data: ""
+    // }).done(() => {
+    //   this.fetchItems();
+    // });
   }
   render() {
     return (
@@ -75,13 +107,18 @@ export default class extends React.Component {
         <App>
           <Top />
           <Input>
-            <StyledTextField floatingLabelText="새 할 일을 입력하세요" value={this.state.inputText} onChange={this.onChangeTextField}/>
+            <StyledTextField floatingLabelText="새 할 일을 입력하세요" value={this.state.inputText} onChange={this.handleChange} onKeyUp={this.handleKeyUp}/>
             <StyledRaisedButton label="추가" primary={true} onClick={this.addItem} />
           </Input>
           <List>
             {
               this.state.items.map((item) => (
-                <StyledListItem key={item.createdAt} primaryText={item.title}/>
+                <StyledListItem key={item.createdAt}>
+                  <ListItemText primary={item.title} />
+                  <ListItemSecondaryAction>
+                    <StyledRaisedDeleteButton label="삭제" secondary={true} onClick={() => this.deleteItem(item.createdAt)}/>
+                  </ListItemSecondaryAction>
+                </StyledListItem>
               ))
             }
           </List>
