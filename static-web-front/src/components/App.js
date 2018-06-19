@@ -1,16 +1,13 @@
 import 'setimmediate'
 import React from 'react'
 import styled from 'styled-components'
-import oc from 'open-color'
 import axios from 'axios'
 import MaterialUiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { List, ListItem } from 'material-ui/List'
 import { TextField, RaisedButton } from 'material-ui'
-import Grid from '@material-ui/core/Grid';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Top from './Top'
-import $ from 'jquery'
 
 const baseURL = 'https://l7dooy4d39.execute-api.ap-northeast-2.amazonaws.com/dev';
 const App = styled.div``
@@ -53,15 +50,15 @@ export default class extends React.Component {
     this.fetchItems()
   }
   addItem() {
-    $.post( `${baseURL}/todo/`, {
+    axios.post(`${baseURL}/todo/`, {
       title: this.state.inputText,
       content: '',
       createdAt: Date.now(),
       updatedAt: Date.now(),
-    }).done(() => {
+    }).then(() => {
       this.setState({inputText: ""});
       this.fetchItems();
-    });
+    })
   }
   fetchItems() {
     axios.get(`${baseURL}/todo/`).then(({ data }) => {
@@ -81,25 +78,7 @@ export default class extends React.Component {
     }
   }
   deleteItem(createdAt) {
-    // axios.delete(`${baseURL}/todo/${createdAt}`).then(({ data }) => {
-    // });
-    // return
-    $.ajax({
-      url: `${baseURL}/todo/${createdAt}`,
-      method: 'delete',
-      contentType: 'application/json',
-      success: function(result) {
-        this.fetchItems();
-      }
-    });
-    // $.ajax({
-    //   url: `${baseURL}/todo/${createdAt}`,
-    //   method: "DELETE",
-    //   contentType: "application/x-www-form-urlencoded",
-    //   data: ""
-    // }).done(() => {
-    //   this.fetchItems();
-    // });
+    axios.delete(`${baseURL}/todo/${createdAt}`).then(this.fetchItems);
   }
   render() {
     return (
