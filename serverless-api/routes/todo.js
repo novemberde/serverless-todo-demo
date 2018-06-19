@@ -21,7 +21,7 @@ router.get("/", (req, res, next) => {
     const userId = res.locals.userId;
     let lastKey = req.query.lastKey;
     
-    return Todo.query('userId').eq(userId).startAt(lastKey).limit(200).exec((err, result) => {
+    return Todo.query('userId').eq(userId).startAt(lastKey).limit(200).descending().exec((err, result) => {
         if(err) return next(err, req, res, next);
         
         res.status(200).json(result);
