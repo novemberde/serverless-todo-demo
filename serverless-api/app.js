@@ -5,12 +5,7 @@ const app = express();
 
 require("aws-sdk").config.region = "ap-northeast-2"
 
-// app.use(cors());
-app.all('*', (req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	next();
-});
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
