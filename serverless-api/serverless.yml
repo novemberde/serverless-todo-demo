@@ -26,7 +26,8 @@ plugins:
 custom:
   apigwBinary:
     types:
-      - '*/*'
+      - 'application/json'
+      - 'text/html'
 
 functions:
   serverlessHandsOn:
@@ -35,4 +36,8 @@ functions:
       - http: 
           path: /{proxy+}
           method: ANY
+          cors: true
+      - http: 
+          path: /{proxy+}
+          method: OPTIONS
           cors: true
