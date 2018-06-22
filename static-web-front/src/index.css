@@ -3,3 +3,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
+
+a.nostyle:link {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
+
+a.nostyle:visited {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
