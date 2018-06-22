@@ -172,7 +172,7 @@ AwsConfigCredentials, Config, Create, Deploy, Emit, Info, Install, Invoke, Login
 - invoke: 특정 handler를 동작시킬 때 사용
 - remove: 배포된 리소스를 제거할 때 사용
 
-간단하게 로컬에서 serverless 명령어를 테스트해봅시다. deploy 명령어는 추후에 사용하겠습니다.
+간단하게 로컬에서 serverless 명령어를 테스트해봅니다. deploy 명령어는 추후에 사용하겠습니다.
 
 ```sh
 # Global 로 serverless framework 설치
