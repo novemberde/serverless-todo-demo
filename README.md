@@ -1,4 +1,4 @@
-# Serverless Group First Hands-on
+# Serverless Group First Hands-on Part 1
 
 AWSKRUG Serverless Group의 첫번째 핸즈온입니다.😁
 
@@ -803,7 +803,7 @@ ec2-user:~/environment $ curl localhost:1234
 ```
 
 정상적으로 출력이 되는 것을 확인하였습니다. 하지만 기본적으로 EC2는 네트워크를 통제하고 있습니다.
-Cloud9은 EC2를 생성하여 사용하는데, 보안그룹(Security Group)을 해야 외부에서
+Cloud9은 EC2를 생성하여 사용하는데, 보안그룹(Security Group)에서 포트를 열어주어야 외부에서
 접근이 가능합니다.
 
 [Security Group Setting](https://ap-southeast-1.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-1#SecurityGroups:sort=groupId)으로
@@ -818,8 +818,8 @@ Cloud9은 EC2를 생성하여 사용하는데, 보안그룹(Security Group)을 �
 
 이제 브라우저를 열고 http://{CLOUD9_PUBLIC_DNS}:1234 에 접속하시면 다음과 같은 화면을 볼 수 있습니다.
 
-CLOUD9_PUBLIC_DNS 확인하는 것은 EC2 console에서 복사/붙여넣기를 하면됩니다.
-이게 귀찮다면 다음과 같이 terminal에 입력합니다. 간단히 public ip를 얻을 수 있습니다.
+CLOUD9_PUBLIC_DNS 확인하는 것은 EC2 console에서 할 수 있습니다.
+그렇지만 이게 귀찮다면 다음과 같이 terminal에 입력합니다. 간단히 public ip를 얻을 수 있습니다.
 그럼 CLOUD9_PUBLIC_DNS 대신 ip를 넣어서 접속해봅니다.
 
 ```sh
@@ -829,7 +829,7 @@ xxx.xxx.xxx.66
 
 ![static-front](/images/static-front.png)
 
-마음껏 추가 삭제 수정을 해보세요! 😀
+이제 마음껏 추가 삭제 수정을 해보세요! 😀
 
 ## 하나 더! 서버리스 테스트하기
 
