@@ -18,6 +18,76 @@ AWS에서 사용하는 리소스는 다음과 같습니다.
 - DynamoDB: 완벽하게 관리되는 NoSQL 데이터베이스 서비스로, 원활한 확장성과 함께 빠르고 예측 가능한 성능을 제공.
 - S3: 어디서나 원하는 양의 데이터를 저장하고 검색할 수 있도록 구축된 객체 스토리지. 소스코드의 저장소로 활용할 예정.
 
+## Cloud 9 시작하기
+
+Cloud9 은 하나의 IDE입니다. 그렇지만 이전의 설치형 IDE와는 다릅니다. 설치형 IDE는 로컬 PC에 프로그램을 설치하던가
+실행하는 방식이었다면, Cloud9은 브라우저가 실행가능한 모든 OS에서 사용이 가능합니다.
+
+맨 처음 Cloud9은 AWS 내에서가 아닌 별도의 서비스로 제공되었습니다. AWS에 인수된 이후 Cloud9은 AWS의 Managed Service형태로 바뀌었고,
+AWS의 서비스와 결합하여 사용이 가능해졌습니다. 코드 편집과 명령줄 지원 등의 평범한 IDE 기능을 지니고 있던 반면에, 현재는 AWS 서비스와
+결합되어 직접 Lambda 코드를 배포하던가, 실제로 Cloud9이 실행되고 있는 EC2의 컴퓨팅 성능을 향상시켜서
+로컬 PC의 사양에 종속되지 않은 개발을 할 수가 있습니다.
+
+그러면 Cloud9 환경을 시작해봅시다.
+
+[Cloud 9 Console](https://ap-southeast-1.console.aws.amazon.com/cloud9/home?region=ap-southeast-1#)에 접속합니다.
+
+아래와 같은 화면에서 [Create Environment](https://ap-southeast-1.console.aws.amazon.com/cloud9/home/create) 버튼을 누릅니다.
+
+![c9-create](/images/c9-create.png)
+
+Name과 Description을 다음과 같이 입력합니다.
+
+- Name: ServerlessHandsOn
+- Description: Serverless hands-on in AWSKRUG Serverless Group
+
+![c9-create-name](/images/c9-create-name.png)
+
+Configure Setting은 다음과 같이 합니다.
+
+- Environment Type: EC2
+- Instance Type: T2.micro
+- Cost Save Setting: After 30 minutes
+- Network Settings: Default
+
+![c9-conf](/images/c9-conf.png)
+
+모든 설정을 마쳤다면 Cloud9 Environment를 생성하고 Open IDE를 통해 개발 환경에 접속합니다.
+
+접속하면 다음과 같은 화면을 볼 수 있습니다.
+
+1. 현재 Environment name
+2. EC2에서 명령어를 입력할 수 있는 Terminal
+3. Lambda Functions
+    - Local Functions: 배포되지 않은 편집중인 Functions
+    - Remote Functions: 현재 설정해놓은 Region에 배포된 Lambda Functions
+4. Preferences
+
+![c9-env](/images/c9-env.png)
+
+현재 ap-southeast-1 region에 Cloud9 Environment를 배포했으므로 Default Region이 ap-southeast-1으로 되어 있습니다.
+Preferences(설정 화면)에서 ap-northeast-2(Seoul Region)으로 바꾸어줍니다.
+
+- Preferences > AWS Settings > Region > Asia Pacific(Seoul)
+
+설정을 마친 다음 Node.js 버전을 올려야합니다.
+현재(2018-06-30) 제공하는 node의 버전이 6.10이기 때문입니다.
+보통은 nvm을 따로 설치해야하지만 Cloud9을 사용하면 별도의 nvm 설치는 필요없습니다.
+다음의 명령어를 terminal에 입력하여 node의 버전을 8.10으로 설정합니다.
+
+```sh
+$ sudo yum groupinstall 'Development Tools'
+$ nvm install 8.10
+Downloading https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz...
+######################################################################## 100.0%
+Now using node v8.10.0 (npm v5.6.0)
+
+# 8.10을 default로 사용하기
+$ nvm alias default 8.10
+```
+
+Cloud9 설정을 완료하였습니다.
+
 ## [Serverless Framework](https://serverless.com/)
 
 ![serverless framework main](/images/serverless-framework-1.png)
@@ -102,7 +172,7 @@ AwsConfigCredentials, Config, Create, Deploy, Emit, Info, Install, Invoke, Login
 - invoke: 특정 handler를 동작시킬 때 사용
 - remove: 배포된 리소스를 제거할 때 사용
 
-간단하게 로컬에서 serverless 명령어를 테스트해봅시다. deploy명령어는 아직 AWS권한이 없기 때문에 사용하지 않습니다.
+간단하게 로컬에서 serverless 명령어를 테스트해봅시다. deploy 명령어는 추후에 사용하겠습니다.
 
 ```sh
 # Global 로 serverless framework 설치
@@ -155,76 +225,6 @@ serverless-state.json파일은 해당 버전의 serverless application에 대한
     "body": "{\"message\":\"Go Serverless v1.0! Your function executed successfully!\",\"input\":\"\"}"
 }
 ```
-
-## Cloud 9 시작하기
-
-Cloud9 은 하나의 IDE입니다. 그렇지만 이전의 설치형 IDE와는 다릅니다. 설치형 IDE는 로컬 PC에 프로그램을 설치하던가
-실행하는 방식이었다면, Cloud9은 브라우저가 실행가능한 모든 OS에서 사용이 가능합니다.
-
-맨 처음 Cloud9은 AWS 내에서가 아닌 별도의 서비스로 제공되었습니다. AWS에 인수된 이후 Cloud9은 AWS의 Managed Service형태로 바뀌었고,
-AWS의 서비스와 결합하여 사용이 가능해졌습니다. 코드 편집과 명령줄 지원 등의 평범한 IDE 기능을 지니고 있던 반면에, 현재는 AWS 서비스와
-결합되어 직접 Lambda 코드를 배포하던가, 실제로 Cloud9이 실행되고 있는 EC2의 컴퓨팅 성능을 향상시켜서
-로컬 PC의 사양에 종속되지 않은 개발을 할 수가 있습니다.
-
-그러면 Cloud9 환경을 시작해봅시다.
-
-[Cloud 9 Console](https://ap-southeast-1.console.aws.amazon.com/cloud9/home?region=ap-southeast-1#)에 접속합니다.
-
-아래와 같은 화면에서 [Create Environment](https://ap-southeast-1.console.aws.amazon.com/cloud9/home/create) 버튼을 누릅니다.
-
-![c9-create](/images/c9-create.png)
-
-Name과 Description을 다음과 같이 입력합니다.
-
-- Name: ServerlessHandsOn
-- Description: Serverless hands-on in AWSKRUG Serverless Group
-
-![c9-create-name](/images/c9-create-name.png)
-
-Configure Setting은 다음과 같이 합니다.
-
-- Environment Type: EC2
-- Instance Type: T2.micro
-- Cost Save Setting: After 30 minutes
-- Network Settings: Default
-
-![c9-conf](/images/c9-conf.png)
-
-모든 설정을 마쳤다면 Cloud9 Environment를 생성하고 Open IDE를 통해 개발 환경에 접속합니다.
-
-접속하면 다음과 같은 화면을 볼 수 있습니다.
-
-1. 현재 Environment name
-2. EC2에서 명령어를 입력할 수 있는 Terminal
-3. Lambda Functions
-    - Local Functions: 배포되지 않은 편집중인 Functions
-    - Remote Functions: 현재 설정해놓은 Region에 배포된 Lambda Functions
-4. Preferences
-
-![c9-env](/images/c9-env.png)
-
-현재 ap-southeast-1 region에 Cloud9 Environment를 배포했으므로 Default Region이 ap-southeast-1으로 되어 있습니다.
-Preferences(설정 화면)에서 ap-northeast-2(Seoul Region)으로 바꾸어줍니다.
-
-- Preferences > AWS Settings > Region > Asia Pacific(Seoul)
-
-설정을 마친 다음 Node.js 버전을 올려야합니다.
-현재(2018-06-30) 제공하는 node의 버전이 6.10이기 때문입니다.
-보통은 nvm을 따로 설치해야하지만 Cloud9을 사용하면 별도의 nvm 설치는 필요없습니다.
-다음의 명령어를 terminal에 입력하여 node의 버전을 8.10으로 설정합니다.
-
-```sh
-$ sudo yum groupinstall 'Development Tools'
-$ nvm install 8.10
-Downloading https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz...
-######################################################################## 100.0%
-Now using node v8.10.0 (npm v5.6.0)
-
-# 8.10을 default로 사용하기
-$ nvm alias default 8.10
-```
-
-Cloud9 설정을 완료하였습니다.
 
 ## S3 Bucket 생성하기
 
