@@ -416,7 +416,7 @@ router.get("/", (req, res, next) => {
     const userId = res.locals.userId;
     let lastKey = req.query.lastKey;
     
-    return Todo.query('userId').eq(userId).startAt(lastKey).limit(200).exec((err, result) => {
+    return Todo.query('userId').eq(userId).startAt(lastKey).limit(1000).descending().exec((err, result) => {
         if(err) return next(err, req, res, next);
         
         res.status(200).json(result);
@@ -582,7 +582,8 @@ plugins:
 custom:
   apigwBinary:
     types:
-      - '*/*'
+      - 'application/json'
+      - 'text/html'
 
 functions:
   serverlessHandsOn:
@@ -591,6 +592,10 @@ functions:
       - http: 
           path: /{proxy+}
           method: ANY
+          cors: true
+      - http: 
+          path: /{proxy+}
+          method: OPTIONS
           cors: true
 ```
 
