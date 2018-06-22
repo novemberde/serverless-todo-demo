@@ -43,9 +43,9 @@ export default class extends React.Component {
         onRequestChange={(isDrawerOpened) => this.setState({ isDrawerOpened })}
         docked={false}
       >
-        <MenuItem leftIcon={<LinkIcon/>}>AWSKRUG Facebook</MenuItem>
-        <MenuItem leftIcon={<LinkIcon/>}>AWSKRUG Slack</MenuItem>
-        <MenuItem leftIcon={<LinkIcon/>}>Github</MenuItem>
+        <MenuItem leftIcon={<LinkIcon/>}><a class="nostyle" target="_blank" href="https://www.facebook.com/groups/awskrug">AWSKRUG Facebook</a></MenuItem>
+        <MenuItem leftIcon={<LinkIcon/>}><a class="nostyle" target="_blank" href="http://slack.awskr.org">AWSKRUG Slack</a></MenuItem>
+        <MenuItem leftIcon={<LinkIcon/>}><a class="nostyle" target="_blank" href="https://github.com/awskrug">Github</a></MenuItem>
       </Drawer>
     ]
   }
