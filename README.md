@@ -1,6 +1,6 @@
 # Serverless Group First Hands-on
 
-AWSKRUG Serverless Group의 첫번째 핸즈온입니다.
+AWSKRUG Serverless Group의 첫번째 핸즈온입니다.😁
 
 ## Objective
 
@@ -207,6 +207,24 @@ Configure Setting은 다음과 같이 합니다.
 Preferences(설정 화면)에서 ap-northeast-2(Seoul Region)으로 바꾸어줍니다.
 
 - Preferences > AWS Settings > Region > Asia Pacific(Seoul)
+
+설정을 마친 다음 Node.js 버전을 올려야합니다.
+현재(2018-06-30) 제공하는 node의 버전이 6.10이기 때문입니다.
+보통은 nvm을 따로 설치해야하지만 Cloud9을 사용하면 별도의 nvm 설치는 필요없습니다.
+다음의 명령어를 terminal에 입력하여 node의 버전을 8.10으로 설정합니다.
+
+```sh
+$ sudo yum groupinstall 'Development Tools'
+$ nvm install 8.10
+Downloading https://nodejs.org/dist/v8.10.0/node-v8.10.0-linux-x64.tar.xz...
+######################################################################## 100.0%
+Now using node v8.10.0 (npm v5.6.0)
+
+# 8.10을 default로 사용하기
+$ nvm alias default 8.10
+```
+
+Cloud9 설정을 완료하였습니다.
 
 ## S3 Bucket 생성하기
 
@@ -737,14 +755,75 @@ CloudFront + S3로 Static Web Site를 호스팅해봅시다.
 # Work directory로 이동
 ec2-user:~/environment $ cd ~/environment
 
+# !! 여기서는 yarn으로 패키지를 설치. npm으로 설치하게 되면 Parcel bundler가 제대로 동작하지 않습니다.
+ec2-user:~/environment $ curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
+ec2-user:~/environment $ sudo yum install yarn
+ec2-user:~/environment $ yarn --version
+
 # Git repository clone하기
 ec2-user:~/environment $ git clone https://github.com/novemberde/serverless-todo-demo.git
 
 # Static Web Site를 구성한 directory로 이동
-ec2-user:~/environment $ cd serverless-todo-demo/app
+ec2-user:~/environment $ cd serverless-todo-demo/static-web-front
+
+# npm으로 package 설치
+ec2-user:~/environment/serverless-todo-demo/static-web-front $ yarn install
+
+# Static Web Site 시작하기
+ec2-user:~/environment/serverless-todo-demo/static-web-front $ npm start
+
+> serverless-todo-demo-app@1.0.0 start /Users/kyuhyunbyun/WorkSpace/workshop/serverless-todo-demo/static-web-front
+> npx parcel src/index.html
+
+Server running at http://localhost:1234
+✨  Built in 3.99s.
 ```
 
+정상적으로 동작하는지 확인하고 싶다면 새로운 터미널을 열고(맥은 option+t, 윈도우는 alt+t) 다음과 같이 확인합니다.
 
+```sh
+ec2-user:~/environment $ curl localhost:1234
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/src.7afc2ec1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+  <script src="/src.7afc2ec1.js"></script></head>
+  <body>
+    <div id="app"></div>
+    <script src="/src.1e244cd7.js"></script>
+  </body>
+</html>
+```
+
+정상적으로 출력이 되는 것을 확인하였습니다. 하지만 기본적으로 EC2는 네트워크를 통제하고 있습니다.
+Cloud9은 EC2를 생성하여 사용하는데, 보안그룹(Security Group)을 해야 외부에서
+접근이 가능합니다.
+
+[Security Group Setting](https://ap-southeast-1.console.aws.amazon.com/ec2/v2/home?region=ap-southeast-1#SecurityGroups:sort=groupId)으로
+들어가서 그룹이름(Group name)이 aws-cloud9-serverless-hands-on로 시작하는 것을 선택합니다.
+
+![security-group](/images/security-group.png)
+
+편집(Edit)을 눌러서 "TCP / 1234 / 위치 무관(Anywhere)"으로 추가합니다.
+
+![security-group](/images/security-group2.png)
+
+
+이제 브라우저를 열고 http://{CLOUD9_PUBLIC_DNS}:1234 에 접속하시면 다음과 같은 화면을 볼 수 있습니다.
+
+CLOUD9_PUBLIC_DNS 확인하는 것은 EC2 console에서 복사/붙여넣기를 하면됩니다.
+이게 귀찮다면 다음과 같이 terminal에 입력합니다. 간단히 public ip를 얻을 수 있습니다.
+그럼 CLOUD9_PUBLIC_DNS 대신 ip를 넣어서 접속해봅니다.
+
+```sh
+ec2-user:~/environment $ curl http://checkip.amazonaws.com/
+xxx.xxx.xxx.66
+```
+
+![static-front](/images/static-front.png)
+
+마음껏 추가 삭제 수정을 해보세요! 😀
 
 ## 하나 더! 서버리스 테스트하기
 
