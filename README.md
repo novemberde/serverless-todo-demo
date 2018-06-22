@@ -487,7 +487,7 @@ router.delete("/:createdAt", (req, res, next) => {
 module.exports = router;
 ```
 
-### serverless-api/spec/todo.spec.js
+### serverless-api/spec/todo.spec.js 
 
 ```js
 const request = require('supertest');
@@ -702,16 +702,17 @@ DynamoDB에서 간단하게 CRUD작업하는 것을 확인할 수 있습니다.
 
 ![c9-deploy](/images/c9-deploy.png) -->
 Node가 8.x버전이 설치되어 있으면 dev-dependency에 설치된 serverless 명령어를 바로 사용할 수 있습니다.
-하지만 현재(2018-04-07)의 기준으로 Cloud9은 node 6.x버전을 지원하기 때문에 Global로 serverless를 설치하여 줍니다.
+만일 node 6.x버전이라면 Global로 serverless를 설치하여 줍니다. 현재는 8.x의 버전을 사용하기 때문에 다음 명령어는 넘어가겠습니다.
 
 ```sh
 ec2-user:~/environment/serverless-todo-demo/serverless-api (master) $ npm i -g serverless
 ```
 
-설치가 완료되었으면 배포를 합니다.
+설치가 완료되었으면 배포를 합니다. package.json에 script에 serverless deploy를 넣어 두었기 때문에
+다음과 같이 배포를 합니다.
 
 ```sh
-ec2-user:~/environment/serverless-todo-demo/serverless-api (master) $ serverless deploy
+ec2-user:~/environment/serverless-todo-demo/serverless-api (master) $ npm run deploy
 Serverless: Packaging service...
 Serverless: Excluding development dependencies...
 Serverless: Uploading CloudFormation file to S3...
