@@ -260,7 +260,7 @@ environment
 │   ├── handler.js  : express를 wrapping하기 위한 handler
 │   ├── config.yml : serverless.yml에서 사용하기 위한 변수
 │   ├── package.json
-│   └── template.yaml : Serverless Application Model Template
+│   └── serverless.yml :  Serverless Framework config file
 └── static-web-front : SPA 방식의 Web Front
 ```
 
@@ -784,6 +784,31 @@ ec2-user:~/environment/serverless-todo-demo/static-web-front $ npm start
 Server running at http://localhost:1234
 ✨  Built in 3.99s.
 ```
+
+웹페이지는 출력되지만 현재 웹이 호출하는 API의 주소를 수정해주어야 현재 올린 API를 사용할 수 있습니다.
+아래와 같은 파일을 열어 baseUrl값을 수정합니다. 이 값은 api를 배포하였을 때 복사해둔 CloudFront 주소입니다.
+
+복사하지 않으셨다면 다음을 다시 참고해주시길 바랍니다.
+<a href="#cloud9에서 배포하기">Cloud9에서 배포하기</a>
+
+### static-web-front/src/components/App.js
+
+```js
+import 'setimmediate'
+import React from 'react'
+import styled from 'styled-components'
+import axios from 'axios'
+import MaterialUiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { List, ListItem } from 'material-ui/List'
+import { TextField, RaisedButton } from 'material-ui'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Top from './Top'
+
+const baseURL = 'CLOUD_FRONT_URL';  // Insert your CloudFront url.
+...
+```
+
+
 
 정상적으로 동작하는지 확인하고 싶다면 새로운 터미널을 열고(맥은 option+t, 윈도우는 alt+t) 다음과 같이 확인합니다.
 
