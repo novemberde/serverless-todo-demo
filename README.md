@@ -789,7 +789,7 @@ Server running at http://localhost:1234
 아래와 같은 파일을 열어 baseUrl값을 수정합니다. 이 값은 api를 배포하였을 때 복사해둔 CloudFront 주소입니다.
 
 복사하지 않으셨다면 다음을 다시 참고해주시길 바랍니다.
-<a href="#cloud9에서 배포하기">Cloud9에서 배포하기</a>
+<a href="#cloud9에서-배포하기">Cloud9에서 배포하기</a>
 
 ### static-web-front/src/components/App.js
 
