@@ -554,7 +554,7 @@ describe("DELETE /todo/:id", () => {
 ### serverless-api/serverless.yml
 
 ```yml
-service: ServerlessHandsOn
+service: ServerlessHandsOnPart1
 
 provider:
   name: aws

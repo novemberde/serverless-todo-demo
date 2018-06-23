@@ -1,4 +1,4 @@
-service: ServerlessHandsOn
+service: ServerlessHandsOnPart1
 
 provider:
   name: aws
