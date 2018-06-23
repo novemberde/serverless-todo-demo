@@ -586,7 +586,7 @@ custom:
       - 'text/html'
 
 functions:
-  serverlessHandsOn:
+  webapp:
     handler: handler.api
     events:
       - http: 
