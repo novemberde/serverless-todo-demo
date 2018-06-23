@@ -872,11 +872,27 @@ ec2-user:~/environment/serverless-todo-demo/static-web-front/dist (master) $ aws
 http://{USERNAME}-serverless-static-web.s3-website.ap-northeast-2.amazonaws.com/ 에 접속하여 나만의 Todo List를 확인해보세요!
 
 
-## 하나 더! 서버리스 테스트하기
+## 리소스 삭제하기
+
+서버리스 앱은 내리는 것이 어렵지 않습니다.
+간단한 Command 하나면 모든 스택이 내려갑니다.
+Cloud9에서 새로운 터미널을 열고 다음과 같이 입력합니다.
+
+```sh
+$ serverless remove
+Serverless: Getting all objects in S3 bucket...
+Serverless: Removing objects in S3 bucket...
+Serverless: Removing Stack...
+Serverless: Checking Stack removal progress...
+............
+Serverless: Stack removal finished...
+```
+
+<!-- ## 하나 더! 서버리스 테스트하기
 
 여기는 도커를 아는 분에 한해서 사용하실 수 있습니다.
 알고보면 Lambda가 내부적으로 Docker container가 올라가는 형태인데요,
-그렇다면 Docker를 활용해서 로컬에서 테스트해볼 수 있지 않을까요?
+그렇다면 Docker를 활용해서 로컬에서 테스트해볼 수 있지 않을까요? -->
 
 
 ## References
