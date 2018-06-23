@@ -1,6 +1,6 @@
 # Serverless Group First Hands-on Part 1
 
-AWSKRUG Serverless Group의 첫번째 핸즈온입니다.😁
+AWSKRUG Serverless Group의 첫번째 핸즈온 Part.1 웹어플리케이션 만들기입니다.😁
 
 ## Objective
 
@@ -831,13 +831,52 @@ xxx.xxx.xxx.66
 
 이제 마음껏 추가 삭제 수정을 해보세요! 😀
 
+## S3를 통해 Static Web Site를 호스팅하기
+
+Amazon S3는 파일을 저장하는 저장소 역할을 합니다. 파일을 저장하고 URL을 통해서 파일에 접근합니다.
+그렇다면 URL로 접근하는 파일이 HTML, CSS, JAVASCRIPT로 작성되어 있다면 브라우저에서 사용이 가능하겠죠?
+
+그래서 S3는 정적인 웹사이트 호스팅을 지원합니다.
+
+이전과 똑같이 [S3 Console](https://console.aws.amazon.com/s3/home?region=ap-northeast-2)에 접속하여 버킷을 생성합니다.
+
+- 버킷이름(Bucket name): {USERNAME}-serverless-static-web
+- 리전(Region): 아시아 태평양(서울)
+
+![static-web1](/images/static-web1.png)
+
+속성 설정은 Default로 두고, 권한설정에서 "이 버킷에 퍼블릭 읽기 액세스 권한을 부여함"을 선택하고 생성합니다.
+
+![static-web3](/images/static-web3.png)
+
+
+그 다음에 생성한 버킷 > 속성 메뉴에 들어가서 [정적 웹사이트 호스팅](Static Website Hosting)을 클릭하고 다음과 같이 입력합니다.
+
+- 인덱스 문서(Index document): index.html
+- 오류 문서(Error document): index.html
+
+![static-web2](/images/static-web2.png)
+
+설정을 완료하였습니다. 그럼 빌드된 html 문서를 S3에 업로드하면 됩니다.
+
+다시 Cloud9으로 돌아와서 다음과 같이 입력합니다.
+
+```sh
+$ cd ~/environment/serverless-todo-demo/static-web-front/dist/
+# USERNAME 은 수정합니다.
+ec2-user:~/environment/serverless-todo-demo/static-web-front/dist (master) $ aws s3 cp ./ s3://{USERNAME}-serverless-static-web/ --recursive --acl public-read
+```
+
+모든 배포가 완료되었습니다.
+
+http://{USERNAME}-serverless-static-web.s3-website.ap-northeast-2.amazonaws.com/ 에 접속하여 나만의 Todo List를 확인해보세요!
+
+
 ## 하나 더! 서버리스 테스트하기
 
 여기는 도커를 아는 분에 한해서 사용하실 수 있습니다.
 알고보면 Lambda가 내부적으로 Docker container가 올라가는 형태인데요,
 그렇다면 Docker를 활용해서 로컬에서 테스트해볼 수 있지 않을까요?
-
-
 
 
 ## References
