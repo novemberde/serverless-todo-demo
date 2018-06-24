@@ -277,7 +277,6 @@ $ npm init -y
 - Dependencies
   - express : Web Application Framework
   - body-parser : Request Body를 parsing하기 위한 미들웨어
-  - aws-sdk : AWS 리소스를 사용하기 위한 SDK
   - aws-serverless-express : Express를 Lambda에서 사용할 수 있도록 Wrapping하는 패키지
   - dynamoose : DynamoDB를 사용하기 쉽도록 Modeling하는 도구
   - dotenv : 환경 변수를 손쉽게 관리할 수 있게 하는 패키지
@@ -287,11 +286,12 @@ $ npm init -y
   - supertest : HTTP 테스트를 하기 위한 모듈
   - should: BDD(Behaviour-Driven Development)를 지원하기 위한 모듈
   - serverless: Serverless Framework
+  - aws-sdk : AWS 리소스를 사용하기 위한 SDK
   - serverless-apigw-binary: Binary Media Type을 지원하기 위한 플러그인
 
 ```sh
-$ npm i -S express aws-sdk aws-serverless-express body-parser dynamoose dotenv
-$ npm i -D mocha should supertest serverless serverless-apigw-binary
+$ npm i -S express aws-serverless-express body-parser dynamoose dotenv
+$ npm i -D mocha should supertest serverless aws-sdk serverless-apigw-binary
 ```
 
 각 파일을 편집합니다.
