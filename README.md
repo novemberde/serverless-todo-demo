@@ -272,7 +272,10 @@ $ cd serverless-api
 $ npm init -y
 ```
 
-필요한 npm module들을 install합니다.
+필요한 npm module들을 install합니다. 
+여기서 aws-sdk는 개발을 위해 설치합니다. 
+Lambda는 aws-sdk를 기본적으로 포함하고 있기 때문에 실제로 배포할 때는 포함시키지 않아야합니다. 
+dev-dependency로 넣어두면 배포할 때 제외됩니다.
 
 - Dependencies
   - express : Web Application Framework
@@ -904,6 +907,7 @@ http://{USERNAME}-serverless-static-web.s3-website.ap-northeast-2.amazonaws.com/
 Cloud9에서 새로운 터미널을 열고 다음과 같이 입력합니다.
 
 ```sh
+$ cd ~/environment/serverless-api
 $ serverless remove
 Serverless: Getting all objects in S3 bucket...
 Serverless: Removing objects in S3 bucket...
@@ -923,3 +927,4 @@ Serverless: Stack removal finished...
 ## References
 
 - [https://aws.amazon.com/ko/cloud9/](https://aws.amazon.com/ko/cloud9/)
+- [https://serverless.com/](https://serverless.com/)
