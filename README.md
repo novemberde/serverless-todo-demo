@@ -245,7 +245,7 @@ S3의 메인으로 가서 버킷 생성하기 버튼을 클릭합니다.
 
 ## Node Express api server 만들어보기
 
-파일 트리는 다음과 같습니다. 다음과 같이 디렉터리와 파일을 생성해주세요.
+파일 트리는 다음과 같습니다.
 
 ```txt
 environment
@@ -293,7 +293,7 @@ dev-dependency로 넣어두면 배포할 때 제외됩니다.
   - serverless-apigw-binary: Binary Media Type을 지원하기 위한 플러그인
 
 ```sh
-$ npm i -S express aws-serverless-express body-parser dynamoose dotenv
+$ npm i -S express aws-serverless-express body-parser dynamoose dotenv cors
 $ npm i -D mocha should supertest serverless aws-sdk serverless-apigw-binary
 ```
 
