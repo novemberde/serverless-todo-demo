@@ -245,7 +245,7 @@ S3의 메인으로 가서 버킷 생성하기 버튼을 클릭합니다.
 
 ## Node Express api server 만들어보기
 
-파일 트리는 다음과 같습니다.
+파일 트리는 다음과 같습니다. 다음과 같이 디렉터리와 파일을 생성해주세요.
 
 ```txt
 environment
@@ -548,6 +548,28 @@ describe("DELETE /todo/:id", () => {
         request(app).delete(`/todo/${createdData.createdAt}`).send(data).expect(204, done);
     });
 });
+```
+
+### serverless-api/package.json
+
+npm script 내용을 추가해주어야 합니다.
+
+```json
+{
+  "name": "serverless-api",
+  ....
+  //// 이 스크립트 영역을 복사해서 붙여넣어줍니다.
+  "scripts": {
+    "test": "mocha spec/*.spec.js --timeout 10000",
+    "start": "node bin/www",
+    "deploy": "serverless deploy"
+  },
+  ////
+  ...
+  "keywords": [],
+  "author": "",
+  ...
+}
 ```
 
 <!-- 마지막으로 template.yaml을 생성합니다. 이것은 Cloud9상에서 Lambda함수를 배포할 수 있도록 해주는 파일입니다. -->
