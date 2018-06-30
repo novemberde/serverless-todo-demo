@@ -70,6 +70,8 @@ Preferences(설정 화면)에서 ap-northeast-2(Seoul Region)으로 바꾸어줍
 
 - Preferences > AWS Settings > Region > Asia Pacific(Seoul)
 
+![c9-region](/images/c9-region.png)
+
 설정을 마친 다음 Node.js 버전을 올려야합니다.
 현재(2018-06-30) 제공하는 node의 버전이 6.10이기 때문입니다.
 보통은 nvm을 따로 설치해야하지만 Cloud9을 사용하면 별도의 nvm 설치는 필요없습니다.
