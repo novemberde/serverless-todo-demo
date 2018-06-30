@@ -113,6 +113,8 @@ open source로 기여하고 싶다면 [https://github.com/serverless/serverless]
 Serverless Framework를 사용하기 위해서 명령어들을 살펴봅시다.
 
 ```sh
+$ npm i -g serverless
+
 # 명령어들을 확인해봅니다.
 $ serverless --help
 
