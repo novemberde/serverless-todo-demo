@@ -928,6 +928,12 @@ Serverless: Checking Stack removal progress...
 Serverless: Stack removal finished...
 ```
 
+[DynamoDB Console](https://ap-northeast-2.console.aws.amazon.com/dynamodb/home?region=ap-northeast-2#)로 들어가서 Table을 삭제합니다. 리전은 서울입니다.
+
+[Cloud9 Console](https://ap-southeast-1.console.aws.amazon.com/cloud9/home?region=ap-southeast-1)로 들어가서 IDE를 삭제합니다. 리전은 싱가포르입니다.
+
+[S3 Console](https://s3.console.aws.amazon.com/s3/home?region=ap-southeast-1#)로 들어가서 생성된 버킷을 삭제합니다.
+
 <!-- ## 하나 더! 서버리스 테스트하기
 
 여기는 도커를 아는 분에 한해서 사용하실 수 있습니다.
