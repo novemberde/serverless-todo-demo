@@ -111,9 +111,6 @@ open source로 기여하고 싶다면 [https://github.com/serverless/serverless]
 Serverless Framework를 사용하기 위해서 명령어들을 살펴봅시다.
 
 ```sh
-# Serverless Framework를 설치합니다.
-$ npm i -g serverless
-
 # 명령어들을 확인해봅니다.
 $ serverless --help
 
@@ -175,8 +172,6 @@ AwsConfigCredentials, Config, Create, Deploy, Emit, Info, Install, Invoke, Login
 간단하게 로컬에서 serverless 명령어를 테스트해봅니다. deploy 명령어는 추후에 사용하겠습니다.
 
 ```sh
-# Global 로 serverless framework 설치
-$ npm i -g serverless
 
 # serverless service 생성 힌트 받기
 $ serverless create --help
@@ -640,7 +635,6 @@ ec2-user:~/environment/serverless-api $ npm start
 > serverless-api@1.0.0 start /home/ec2-user/environment/serverless-api
 > node bin/www
 
-ap-northeast-2
 Server is running on 8080
 ```
 
@@ -681,7 +675,6 @@ ec2-user:~/environment/serverless-api $ npm test
 > serverless-api@1.0.0 test /home/ec2-user/environment/serverless-api
 > mocha spec/*.spec.js --timeout 10000
 
-ap-northeast-2
 
 
   POST /todo
@@ -728,10 +721,6 @@ DynamoDB에서 간단하게 CRUD작업하는 것을 확인할 수 있습니다.
 ![c9-deploy](/images/c9-deploy.png) -->
 Node가 8.x버전이 설치되어 있으면 dev-dependency에 설치된 serverless 명령어를 바로 사용할 수 있습니다.
 만일 node 6.x버전이라면 Global로 serverless를 설치하여 줍니다. 현재는 8.x의 버전을 사용하기 때문에 다음 명령어는 넘어가겠습니다.
-
-```sh
-ec2-user:~/environment/serverless-todo-demo/serverless-api (master) $ npm i -g serverless
-```
 
 설치가 완료되었으면 배포를 합니다. package.json에 script에 serverless deploy를 넣어 두었기 때문에
 다음과 같이 배포를 합니다.
