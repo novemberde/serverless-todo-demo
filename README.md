@@ -303,7 +303,7 @@ $ npm i -D mocha should supertest serverless aws-sdk serverless-apigw-binary
 ```yml
 AWS_REGION: ap-northeast-2
 STAGE: dev
-DEPLOYMENT_BUCKET: ${USERNAME}-serverless-hands-on-1    # USERNAME 수정 필요!
+DEPLOYMENT_BUCKET: USERNAME-serverless-hands-on-1    # USERNAME 수정 필요!
 ```
 
 ### serverless-api/app.js
@@ -883,7 +883,7 @@ Amazon S3는 파일을 저장하는 저장소 역할을 합니다. 파일을 저
 
 이전과 똑같이 [S3 Console](https://console.aws.amazon.com/s3/home?region=ap-northeast-2)에 접속하여 버킷을 생성합니다.
 
-- 버킷이름(Bucket name): {USERNAME}-serverless-static-web
+- 버킷이름(Bucket name): USERNAME-serverless-static-web
 - 리전(Region): 아시아 태평양(서울)
 
 ![static-web1](/images/static-web1.png)
@@ -912,7 +912,7 @@ ec2-user:~/environment/serverless-todo-demo/static-web-front/dist (master) $ aws
 
 모든 배포가 완료되었습니다.
 
-http://{USERNAME}-serverless-static-web.s3-website.ap-northeast-2.amazonaws.com/ 에 접속하여 나만의 Todo List를 확인해보세요!
+http://USERNAME-serverless-static-web.s3-website.ap-northeast-2.amazonaws.com/ 에 접속하여 나만의 Todo List를 확인해보세요!
 
 
 ## 리소스 삭제하기
