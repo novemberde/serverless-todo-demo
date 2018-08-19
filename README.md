@@ -2,6 +2,8 @@
 
 AWSKRUG Serverless Group의 첫번째 핸즈온 Part.1 웹어플리케이션 만들기입니다.😁
 
+#### [DEMO](http://khbyun-serverless-static-web.s3-website.ap-northeast-2.amazonaws.com/)
+
 ## Objective
 
 Amazon Web Service 를 활용하여 Serverless architecture로 구성된 API를 배포합니다.
