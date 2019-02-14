@@ -1,0 +1,52 @@
+{
+   "name": "serverless-ts-api",
+   "version": "1.0.0",
+   "description": "template",
+   "main": "index.js",
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "nodemon",
+      "rebuild:sls": "./sls-build.sh",
+      "build:sls": "npx tsc",
+      "deploy:sls": "npx serverless deploy"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/novemberde/hanko_admin.git"
+   },
+   "nodemonConfig": {
+      "exec": "ts-node -r dotenv/config src/www.ts dotenv_config_path=./.env",
+      "watch": [
+         "src/*"
+      ],
+      "delay": "500"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/novemberde/ts-express-orm-template/issues"
+   },
+   "homepage": "https://github.com/novemberde/ts-express-orm-template#readme",
+   "dependencies": {
+      "aws-serverless-express": "^3.3.5",
+      "body-parser": "^1.18.3",
+      "cors": "^2.8.5",
+      "dynamoose": "^1.6.1",
+      "express": "^4.16.4",
+      "mecab-ya": "^0.1.1",
+      "morgan": "^1.9.1",
+      "source-map-support": "^0.5.10"
+   },
+   "devDependencies": {
+      "@types/body-parser": "^1.17.0",
+      "@types/express": "^4.16.0",
+      "@types/morgan": "^1.7.35",
+      "dotenv": "^6.2.0",
+      "nodemon": "^1.18.8",
+      "serverless": "^1.37.1",
+      "serverless-apigw-binary": "^0.4.4",
+      "ts-node": "^3.3.0",
+      "typescript": "^3.1.4"
+   }
+}

@@ -63,6 +63,7 @@ typings/
 .cache/
 dist/
 
-package-lock.json
 config.yml
 .DS_Store
+
+build/
