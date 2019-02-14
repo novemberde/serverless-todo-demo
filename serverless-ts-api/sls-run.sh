@@ -1,0 +1,1 @@
+docker run --rm -e NODE_ENV=development -v $PWD:/var/task lambci/lambda:nodejs8.10 build/handler.api '{"resource": "/","path": "/test","httpMethod": "GET"}'
