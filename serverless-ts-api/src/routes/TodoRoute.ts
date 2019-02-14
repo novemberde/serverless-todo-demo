@@ -65,10 +65,7 @@ export default class TodoRoute {
     const {
       content,
     } = req.body;
-    console.log(typeof content);
-    console.log(content);
-    console.log(req.body);
-    console.log(req);
+
     if(typeof content !== 'string' || content.trim().length < 2) return res.status(400).json('Invalid content');
 
     next();
@@ -173,9 +170,9 @@ export default class TodoRoute {
       if(!createdAt) return res.status(400).send("Bad request. createdAt is undefined");
 
       await TodoMecab.delete({
-          userId,
-          createdAt,
-      });
+        userId,
+        createdAt,
+    });
 
       return res.status(204).json({});
     } catch (error) {
