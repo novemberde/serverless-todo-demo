@@ -15,16 +15,8 @@ $ npm install
 
 2. You need mecab or mecab-ko for Korean language.
 
-If you don't have mecab yet, you can install with the prepared script.
+Build mecab using docker image "lambci/lambda:build-nodejs8.10". [reference](https://hub.docker.com/r/lambci/lambda)
 
-```bash
-$ node_modules/mecab-ya/bin/install-mecab
-For the Korean language.
-
-$ node_modules/mecab-ya/bin/install-mecab ko
-```
-
-<!-- 2. Re-build using docker image "lambci/lambda:build-nodejs8.10". [reference](https://hub.docker.com/r/lambci/lambda) -->
 
 ```bash
 $ ./sls-build.sh 
