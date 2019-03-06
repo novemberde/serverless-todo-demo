@@ -400,6 +400,8 @@ module.exports.api = (event, context) => awsServerlessExpress.proxy(server, even
 const router = require("express").Router();
 const dynamoose = require('dynamoose');
 const _ = require('lodash');
+
+dynamoose.AWS.config.region = process.env.AWS_REGION;
 const Todo = dynamoose.model('Todo', {
     userId: {
         type: String,
