@@ -16,7 +16,8 @@
       <b-button primary class='my-button' @click="sendMessage">SEND</b-button>
     </div>
     <div class="footer">
-      <a href="https://github.com/awskrug/serverless-group" target="blank">AWSKRUG Serverless Group Github</a>
+      <div><a href="https://github.com/awskrug/serverless-group" target="blank">AWSKRUG Serverless Group Github</a></div>
+      <div><a href="https://github.com/awskrug/pangyo-group" target="blank">AWSKRUG Pangyo Group Github</a></div>
     </div>
   </div>
 </template>
