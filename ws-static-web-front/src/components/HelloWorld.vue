@@ -12,7 +12,11 @@
     </div>
     <div class='my-input'>
       <span>My number: {{username}}</span>
-      <b-input @keyup="handleKeyUp" :value="val" placeholder='Write what your plan for this year 😁'/>
+      <b-input @keyup="handleKeyUp" :value="val" placeholder='Write what your plan for this year 😁' class='my-input-box'/>
+      <b-button primary class='my-button' @click="sendMessage">SEND</b-button>
+    </div>
+    <div class="footer">
+      <a href="https://github.com/awskrug/serverless-group" target="blank">AWSKRUG Serverless Group Github</a>
     </div>
   </div>
 </template>
@@ -82,6 +86,8 @@ export default {
           content: content,
         }
       ];
+      var container = this.$el.querySelector(".chat");
+      container.scrollTop = container.scrollHeight;
     }
   },
 }
@@ -89,11 +95,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='scss' scoped>
-$chat-width: 600px;
-$my-input-width: 600 - 40px;
+$chat-width: 550px;
+$chat-height: 550px;
+$my-input-width: 550 - 40px;
 .chat {
   width: $chat-width;
-  height: 600px;
+  height: $chat-height;
   background-color: #F2F2F2;
   margin: auto;
   border-radius: 5%;
@@ -119,5 +126,18 @@ $my-input-width: 600 - 40px;
 }
 .chat-message {
   float: left;
+}
+.footer {
+  width: $chat-width;
+  margin: auto;
+  padding-right: 90px;
+}
+.my-input-box,.my-button {
+  float: left;
+}
+.my-button {
+  position: relative;
+  top: -38px;
+  left: $chat-width - 90px;
 }
 </style>

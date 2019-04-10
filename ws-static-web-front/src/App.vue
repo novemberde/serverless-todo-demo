@@ -18,7 +18,7 @@ export default {
 
 <style>
 img {
-  width: 400px;
+  width: 300px;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
