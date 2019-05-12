@@ -63,7 +63,7 @@ typings/
 .cache/
 dist/
 
-config.yml
+serverless-*/config.yml
 .DS_Store
 
 build/
