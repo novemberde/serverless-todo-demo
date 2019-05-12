@@ -58,7 +58,7 @@ jobs:
           key: install-{{ .Branch }}-{{ checksum "serverless-api/package-lock.json" }}
       - run: 
           working_directory: serverless-api
-          command: echo "STAGE: dev\nAWS_REGION: $AWS_REGION\nDEPLOYMENT_BUCKET: novemberde-serverless-hands-on-1" > config.yml
+          command: echo "STAGE: $STAGE\nAWS_REGION: $AWS_REGION\nDEPLOYMENT_BUCKET: $DEPLOYMENT_BUCKET" > config.yml
       - run: 
           working_directory: serverless-api
           command: npm run deploy
