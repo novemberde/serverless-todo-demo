@@ -7,7 +7,6 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            # when lock file changes, use increasingly general patterns to restore cache
             - install-{{ .Branch }}-{{ checksum "serverless-api/package.json" }}
       - run: 
           working_directory: serverless-api
@@ -25,7 +24,6 @@ jobs:
   #   steps:
   #     - restore_cache:
   #         keys:
-  #           # when lock file changes, use increasingly general patterns to restore cache
   #           - install-{{ checksum "serverless-api/package-lock.json" }}
   #     - checkout
   #     - run: 
@@ -47,7 +45,6 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            # when lock file changes, use increasingly general patterns to restore cache
             - install-{{ .Branch }}-{{ checksum "serverless-api/package.json" }}
       - run: 
           working_directory: serverless-api
