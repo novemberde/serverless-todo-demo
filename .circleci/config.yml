@@ -4,11 +4,11 @@ jobs:
     docker:
       - image: lambci/lambda:nodejs8.10
     steps:
+      - checkout
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
             - install-{{ .Branch }}-{{ checksum "serverless-api/package-lock.json" }}
-      - checkout
       - run: 
           working_directory: serverless-api
           command: npm i
@@ -44,11 +44,11 @@ jobs:
     docker:
       - image: lambci/lambda:nodejs8.10
     steps:
+      - checkout
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
             - install-{{ .Branch }}-{{ checksum "serverless-api/package-lock.json" }}
-      - checkout
       - run: 
           working_directory: serverless-api
           command: npm i
