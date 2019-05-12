@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: lambci/lambda:nodejs8.10
+      - image: lambci/lambda:build-nodejs8.10 
     steps:
       - checkout
       - restore_cache:
@@ -21,7 +21,7 @@ jobs:
           command: npm test
   # build:
   #   docker:
-  #     - image: lambci/lambda:nodejs8.10
+  #     - image: lambci/lambda:build-nodejs8.10
   #   steps:
   #     - restore_cache:
   #         keys:
@@ -42,7 +42,7 @@ jobs:
   #         key: build-{{ .Branch }}-{{ checksum "serverless-api/package-lock.json" }}
   deploy:
     docker:
-      - image: lambci/lambda:nodejs8.10
+      - image: lambci/lambda:build-nodejs8.10 
     steps:
       - checkout
       - restore_cache:
