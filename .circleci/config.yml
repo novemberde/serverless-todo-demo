@@ -8,14 +8,14 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - install-{{ .Branch }}-{{ checksum "serverless-api/package-lock.json" }}
+            - install-{{ .Branch }}-{{ checksum "serverless-api/package.json" }}
       - run: 
           working_directory: serverless-api
           command: npm i
       - save_cache:
           paths:
             -  serverless-api/node_modules
-          key: install-{{ .Branch }}-{{ checksum "serverless-api/package-lock.json" }}
+          key: install-{{ .Branch }}-{{ checksum "serverless-api/package.json" }}
       - run: 
           working_directory: serverless-api
           command: npm test
@@ -48,14 +48,14 @@ jobs:
       - restore_cache:
           keys:
             # when lock file changes, use increasingly general patterns to restore cache
-            - install-{{ .Branch }}-{{ checksum "serverless-api/package-lock.json" }}
+            - install-{{ .Branch }}-{{ checksum "serverless-api/package.json" }}
       - run: 
           working_directory: serverless-api
           command: npm i
       - save_cache:
           paths:
             -  serverless-api/node_modules
-          key: install-{{ .Branch }}-{{ checksum "serverless-api/package-lock.json" }}
+          key: install-{{ .Branch }}-{{ checksum "serverless-api/package.json" }}
       - run: 
           working_directory: serverless-api
           command: echo "STAGE {{':'}}  $STAGE\nAWS_REGION {{':'}}  $AWS_REGION\nDEPLOYMENT_BUCKET {{':'}}  $DEPLOYMENT_BUCKET" > config.yml
