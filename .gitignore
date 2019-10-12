@@ -67,3 +67,4 @@ serverless-*/config.yml
 .DS_Store
 
 build/
+.envrc
