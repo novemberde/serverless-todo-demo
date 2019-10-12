@@ -32,9 +32,9 @@ AWS의 서비스와 결합하여 사용이 가능해졌습니다. 코드 편집�
 
 그러면 Cloud9 환경을 시작해봅시다.
 
-[Cloud 9 Console](https://ap-southeast-1.console.aws.amazon.com/cloud9/home?region=ap-southeast-1#)에 접속합니다.
+[Cloud 9 Console](https://ap-northeast-1.console.aws.amazon.com/cloud9/home?region=ap-northeast-1#)에 접속합니다.(도쿄에서 생성)
 
-아래와 같은 화면에서 [Create Environment](https://ap-southeast-1.console.aws.amazon.com/cloud9/home/create) 버튼을 누릅니다.
+아래와 같은 화면에서 [Create Environment](https://ap-northeast-1.console.aws.amazon.com/cloud9/home/create) 버튼을 누릅니다.
 
 ![c9-create](/images/c9-create.png)
 
@@ -74,7 +74,7 @@ Preferences(설정 화면)에서 ap-northeast-2(Seoul Region)으로 바꾸어줍
 
 ![c9-region](/images/c9-region.png)
 
-설정을 마친 다음 Node.js 버전을 올려야합니다.
+<!-- 설정을 마친 다음 Node.js 버전을 올려야합니다.
 현재(2018-06-30) 제공하는 node의 버전이 6.10이기 때문입니다.
 보통은 nvm을 따로 설치해야하지만 Cloud9을 사용하면 별도의 nvm 설치는 필요없습니다.
 다음의 명령어를 terminal에 입력하여 node의 버전을 8.10으로 설정합니다.
@@ -88,7 +88,7 @@ Now using node v8.10.0 (npm v5.6.0)
 
 # 8.10을 default로 사용하기
 $ nvm alias default 8.10
-```
+``` -->
 
 Cloud9 설정을 완료하였습니다.
 
