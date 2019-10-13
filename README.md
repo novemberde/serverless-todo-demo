@@ -784,9 +784,7 @@ CloudFront + S3로 Static Web Site를 호스팅해봅시다.
 ec2-user:~/environment $ cd ~/environment
 
 # !! 여기서는 yarn으로 패키지를 설치. npm으로 설치하게 되면 Parcel bundler가 제대로 동작하지 않습니다.
-ec2-user:~/environment $ curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
-ec2-user:~/environment $ sudo yum install yarn
-ec2-user:~/environment $ yarn --version
+ec2-user:~/environment $ npm i -g yarn
 
 # Git repository clone하기
 ec2-user:~/environment $ git clone https://github.com/novemberde/serverless-todo-demo.git
