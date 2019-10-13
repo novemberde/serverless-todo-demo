@@ -920,6 +920,17 @@ ec2-user:~/environment/serverless-todo-demo/static-web-front/dist (master) $ aws
 
 http://USERNAME-serverless-static-web.s3-website.ap-northeast-2.amazonaws.com/ 에 접속하여 나만의 Todo List를 확인해보세요!
 
+만약 https를 적용하고 싶으시다면 CloudFront를 활용해야합니다.
+
+[https://console.aws.amazon.com/cloudfront/home](https://console.aws.amazon.com/cloudfront/home)
+
+> 여기서 s3의 website 주소를 origin으로 하여 생성해야합니다.
+> s3 origin을 select box에서 선택하지 않고, 직접 정적 웹사이트 호스팅 란에 나와있는 주소를 복/붙합니다.
+> Redirect HTTP to HTTPS 선택
+> Default Root Object는 index.html 로 설정합니다.
+
+커스텀 도메인은 나중에 생기면 넣어봅니다.
+
 
 ## 리소스 삭제하기
 
