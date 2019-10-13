@@ -564,7 +564,7 @@ npm script 내용을 추가해주어야 합니다.
   //// 이 스크립트 영역을 복사해서 붙여넣어줍니다.
   "scripts": {
     "test": "mocha spec/*.spec.js --timeout 10000",
-    "start": "node bin/www",
+    "start": "AWS_REGION=ap-northeast-2 node bin/www",
     "deploy": "serverless deploy"
   },
   ////
