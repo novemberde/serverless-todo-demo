@@ -786,6 +786,10 @@ ec2-user:~/environment $ cd ~/environment
 # !! 여기서는 yarn으로 패키지를 설치. npm으로 설치하게 되면 Parcel bundler가 제대로 동작하지 않습니다.
 ec2-user:~/environment $ npm i -g yarn
 
+# !! 여기서 사용하는 패키지 중에 하나가 node 9.x 이하로 지원됩니다.
+ec2-user:~/environment $ nvm install 9
+ec2-user:~/environment $ nvm use 9
+
 # Git repository clone하기
 ec2-user:~/environment $ git clone https://github.com/novemberde/serverless-todo-demo.git
 
