@@ -913,7 +913,7 @@ Amazon S3는 파일을 저장하는 저장소 역할을 합니다. 파일을 저
 ```sh
 $ cd ~/environment/serverless-todo-demo/static-web-front/dist/
 # USERNAME 은 수정합니다.
-ec2-user:~/environment/serverless-todo-demo/static-web-front/dist (master) $ aws s3 cp ./ s3://{USERNAME}-serverless-static-web/ --recursive --acl public-read
+ec2-user:~/environment/serverless-todo-demo/static-web-front/dist (master) $ aws s3 cp ./ s3://USERNAME-serverless-static-web/ --recursive --acl public-read
 ```
 
 모든 배포가 완료되었습니다.
