@@ -32,7 +32,7 @@ AWS의 서비스와 결합하여 사용이 가능해졌습니다. 코드 편집�
 
 그러면 Cloud9 환경을 시작해봅시다.
 
-[Cloud 9 Console](https://ap-northeast-1.console.aws.amazon.com/cloud9/home?region=ap-northeast-1#)에 접속합니다.(도쿄에서 생성)
+[Cloud 9 Console](https://ap-northeast-2.console.aws.amazon.com/cloud9/home?region=ap-northeast-2#)에 접속합니다.
 
 아래와 같은 화면에서 [Create Environment](https://ap-northeast-1.console.aws.amazon.com/cloud9/home/create) 버튼을 누릅니다.
 
@@ -66,13 +66,6 @@ Configure Setting은 다음과 같이 합니다.
 4. Preferences
 
 ![c9-env](/images/c9-env.png)
-
-현재 ap-southeast-1 region에 Cloud9 Environment를 배포했으므로 Default Region이 ap-southeast-1으로 되어 있습니다.
-Preferences(설정 화면)에서 ap-northeast-2(Seoul Region)으로 바꾸어줍니다.
-
-- Preferences > AWS Settings > Region > Asia Pacific(Seoul)
-
-![c9-region](/images/c9-region.png)
 
 <!-- 설정을 마친 다음 Node.js 버전을 올려야합니다.
 현재(2018-06-30) 제공하는 node의 버전이 6.10이기 때문입니다.
@@ -586,7 +579,7 @@ service: ServerlessHandsOnPart1
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   memorySize: 128
   stage:  ${file(./config.yml):STAGE}
   region: ${file(./config.yml):AWS_REGION}
@@ -951,9 +944,9 @@ Serverless: Stack removal finished...
 
 [DynamoDB Console](https://ap-northeast-2.console.aws.amazon.com/dynamodb/home?region=ap-northeast-2#)로 들어가서 Table을 삭제합니다. 리전은 서울입니다.
 
-[Cloud9 Console](https://ap-southeast-1.console.aws.amazon.com/cloud9/home?region=ap-southeast-1)로 들어가서 IDE를 삭제합니다. 리전은 싱가포르입니다.
+[Cloud9 Console](https://ap-northeast-2.console.aws.amazon.com/cloud9/home?region=ap-northeast-2)로 들어가서 IDE를 삭제합니다. 리전은 싱가포르입니다.
 
-[S3 Console](https://s3.console.aws.amazon.com/s3/home?region=ap-southeast-1#)로 들어가서 생성된 버킷을 삭제합니다.
+[S3 Console](https://s3.console.aws.amazon.com/s3/home?region=ap-northeast-2#)로 들어가서 생성된 버킷을 삭제합니다.
 
 <!-- ## 하나 더! 서버리스 테스트하기
 
