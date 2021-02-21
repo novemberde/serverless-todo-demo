@@ -2,7 +2,9 @@ const router = require("express").Router();
 const dynamoose = require('dynamoose');
 const _ = require('lodash');
 
-dynamoose.AWS.config.region = process.env.AWS_REGION;
+dynamoose.aws.sdk.config.update({
+    "region": process.env.AWS_REGION,
+});
 const Todo = dynamoose.model('Todo', {
     userId: {
         type: String,
@@ -22,10 +24,9 @@ const Todo = dynamoose.model('Todo', {
 router.get("/", (req, res, next) => {
     const userId = res.locals.userId;
     let lastKey = req.query.lastKey;
-    
-    return Todo.query('userId').eq(userId).startAt(lastKey).limit(1000).descending().exec((err, result) => {
+ 
+    return Todo.query('userId').eq(userId).sort("descending").startAt(lastKey).limit(1000).exec((err, result) => {
         if(err) return next(err, req, res, next);
-        
         res.status(200).json(result);
     })
 });

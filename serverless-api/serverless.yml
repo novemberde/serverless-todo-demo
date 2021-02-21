@@ -1,43 +1,38 @@
-service: ServerlessHandsOnPart1
-
+service: serverless-hands-on
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   memorySize: 128
+  timeout: 2
+  versionFunctions: false # optional, default is true
+  tracing:
+    lambda: false
   stage:  ${file(./config.yml):STAGE}
   region: ${file(./config.yml):AWS_REGION}
   deploymentBucket: ${file(./config.yml):DEPLOYMENT_BUCKET}
   environment:
     NODE_ENV: production
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:*"
-
-plugins:
- - serverless-apigw-binary
-custom:
-  apigwBinary:
-    types:
-      - 'application/json'
-      - 'text/html'
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:*"
 
 functions:
   webapp:
     handler: handler.api
     events:
-      - http: 
-          path: /{proxy+}
-          method: ANY
-          cors: true
-      - http: 
-          path: /{proxy+}
-          method: OPTIONS
-          cors: true
+      - httpApi:
+          path: "*"
+
+package:
+  exclude:
+    - '!node_modules/node-fetch/**'

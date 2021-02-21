@@ -1,10 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 const app = express();
 
 require("aws-sdk").config.region = "ap-northeast-2"
 
+app.use(awsServerlessExpressMiddleware.eventContext())
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,10 +18,15 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res, next) => {
-	res.send("hello world!\n");
+	
+	res.json({
+		message: "Hello world",
+		path: req.path,
+		event: req.apiGateway?.event,
+	});
 });
-
 app.use("/todo", require("./routes/todo"));
+
 
 app.use((req, res, next) => {
 	return res.status(404).send("Not Found");
