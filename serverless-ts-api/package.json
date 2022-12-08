@@ -30,10 +30,10 @@
    "homepage": "https://github.com/novemberde/ts-express-orm-template#readme",
    "dependencies": {
       "aws-serverless-express": "^3.3.5",
-      "body-parser": "^1.18.3",
+      "body-parser": "^1.20.1",
       "cors": "^2.8.5",
       "dynamoose": "^1.6.2",
-      "express": "^4.16.4",
+      "express": "^4.18.2",
       "mecab-ya": "^0.1.1",
       "morgan": "^1.9.1",
       "source-map-support": "^0.5.10"
