@@ -33,7 +33,7 @@
       "body-parser": "^1.18.3",
       "cors": "^2.8.5",
       "dynamoose": "^1.6.2",
-      "express": "^4.16.4",
+      "express": "^4.17.3",
       "mecab-ya": "^0.1.1",
       "morgan": "^1.9.1",
       "source-map-support": "^0.5.10"
